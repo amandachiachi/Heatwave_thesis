@@ -1,0 +1,56 @@
+label,description,units
+Date,date of respiration trial,mm/dd/yy
+Time,time of respuration trial,hh:mm:ss
+Channel,channel assigned to respiration chamber,10-Jan
+User,default,
+SensorID,sensor ID number,
+Sensor_Name,indicates what sensor is used,OXY_CH1-10
+delta_t,change in temperature,degrees C
+Time_Unit,units of time measurement,minute
+Value,starting oxygen value,
+O2_Unit,unit of oxygen consumption measurement,umol/L
+Mode,,humid
+Phase,,
+Phase_Unit,,degree
+Amplitude,amplitude amount,uV
+Amplitude_Unit,,uV
+Temp,temperature of respiration chamber,degrees C
+Temp_Unit,,degrees C
+Pressure,amount of pressure in respiration chamber,hPa
+Pressure_Unit,,hPa
+Salinity,amount of salinity in respiration chamber,pmil
+Salinity_Unit,,pmil
+Error,0,0
+Cal0,,
+Cal0_Unit,,degrees
+T0,,
+T0_Unit,,degrees C
+O2Cal2nd,,%a.s.
+O2_Unit,,%a.s.
+Cal2nd,,degrees C
+Cal2nd_Unit,,degrees C
+T2nd,,degrees C
+T2nd_Unit,,degrees C
+CalPressure,calibration pressure,hPa
+CalPressure_Unit,,hPa
+f1,,
+dPhi1,,
+dkSv1,,
+dPhi2,,
+dkSv2,,
+m,,
+Cal_Mode,,
+SignalLEDCurrent,,
+User_Signal_Intensity,,
+ReferenceLEDCurrent,,
+Reference_Amplitude,,
+Device_Serial,,
+FwVersion,,
+SwVersion,,
+Sensor_Type,,
+BatchID,,
+Calibration_Date,,
+Sensor_Lot,,
+PreSens_Calibr,,
+Battery_Voltage,,
+Battery_Voltage_Unit,,
