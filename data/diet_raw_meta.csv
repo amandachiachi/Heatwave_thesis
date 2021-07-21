@@ -1,0 +1,8 @@
+label,description,units
+tank_ID,tank number,(1-20)
+size_class ,"30, 60 or 90",mm
+diet_treatment,control or treatment: were there abalone in the tank or not?,
+heatwave_treatment,treatment that the tanks went through for the heatwave trials,ambient or heatwave
+initial_weight,initial weight of macrosystis ,grams
+final_weight,final weight of macrisystis ,grams
+weight_loss,weight loss over 24 hour time period,

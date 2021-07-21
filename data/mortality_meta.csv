@@ -1,0 +1,7 @@
+label,description,units
+time,days after peak heatwave ,
+abalone_ID,ID number on each indiidual abalone ,(1-90)
+size_class,"30, 60 or 90",mm
+status,"alive or dead (0 = alive, 1 = dead)",
+treatment,treatment that the tanks went through for the heatwave trials,ambient or heatwave
+tank_ID,tank number,(1-20)

@@ -1,0 +1,68 @@
+---
+title: "Regression_resp_CI_mort"
+author: "Amanda"
+date: "7/21/2021"
+output: 
+  html_document:
+    toc: TRUE
+    toc_float: TRUE
+    theme: yeti
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Linear Regression 
+
+## Load Libraries
+
+```{r, message=FALSE}
+#load libraries
+
+library('tidyverse')
+library('lmerTest')
+library('lme4')
+library('tidyr')
+library('here')
+library('PNWColors')
+
+getwd()
+```
+
+#1. Clean Data 
+
+```{r}
+Respo_CI_Mort <- read.csv("data/Respo_CI_mortality.csv")
+```
+
+# First attempt to run a linear regression for respiration and mortality 
+## Continuous predictor, dichotomous outcome
+
+```{r}
+#Respo_CI_Mort$mortality<-as.factor(Respo_CI_Mort$mortality)
+logr_mort <- glm(mortality ~ mg.gram.hr, data = Respo_CI_Mort, family = binomial)
+logr_mort
+summary(logr_mort)
+```
+
+# Plotting 
+```{r}
+
+plot_mort <- broom::augment(logr_mort, type.predict = "response")
+head(plot_mort)
+
+base <- 
+  ggplot(plot_mort, aes(x = mg.gram.hr))+
+  geom_line(aes(y = .fitted), color = "blue")+
+  labs(x = "mg.gram.hr" , y = "mortality")
+
+base+ geom_point(aes(y= mortality), alpha = 0.2)
+
+ggplot(Respo_CI_Mort, aes(x=mg.gram.hr, y = mortality)) + geom_point()+
+  stat_smooth(method = "glm", method.args = list(family = "binomial"), se=FALSE)
+
+plot(Respo_CI_Mort$mg.gram.hr, Respo_CI_Mort$mortality) 
+curve(predict(logr_mort, data.frame(mg.gram.hr=x), type = "response"), add = TRUE)
+```
+

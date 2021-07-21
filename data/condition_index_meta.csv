@@ -1,0 +1,10 @@
+label,description,units
+time_period,time of measurements taken,"receiving, prehw, posthw, final"
+abalone_ID,ID number on each indiidual abalone ,(1-90)
+weight,weight of individual abalone,grams
+shell_length,length of individual shell of abalone ,centimeters
+denominator,shell length cubed,cm^3
+CI,body condition index -- weight / shell length cubed,grams/cm^3
+size_class,"average length of abalone (30, 60 or 90)","30, 60, 90"
+treatment,amb (abmient) or hw (heatwave),
+tank_ID,tank number that individual abalone is in,(2-20)

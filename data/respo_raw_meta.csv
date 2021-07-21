@@ -1,0 +1,22 @@
+label ,description,units
+abalone_ID,ID number on each indiidual abalone ,(1-90)
+abalone_full_label,abnumber_treatment_channelnumber_trialnumber_timepoint_date,
+Intercept,intercept for plotting,
+umol.L.sec,micro moles of oxygen consumption per Liter per second in chamber,umol/liter/sec
+Temp.C,water temperature of trial,degrees C
+block,"A: prehw, B: posthw, C: final number: respiration trial number for each timepoint",
+size_class,"average length of abalone (30, 60 or 90)",mm 
+treatment,amb (abmient) or hw (heatwave),
+weight,weight of individual abalone,mg
+volume,volume of chamber,ml
+chamber.channel,channel assigned to respirpmetry chamber,
+temp,assigned temperature treatment (not actual temperature),degrees C
+period,"prehw, posthw or final ",
+BLANK,blank chamber ,0
+start.time,start time of the respiration trial ,mm/dd/yy hh:mm
+stop.time,stop time of the respiration trial ,mm/dd/yy hh:mm
+umol.sec,measure of micromoles per second of oxygen consumption,umol/sec
+blank.rate,rate of oxygen consumption in the blank chamber,
+umol.sec.corr,measure of micromoles per second of oxygen consumption (corrected),umol/sec
+umol.gram.hr,measure of micromoles per gram of oxygen consumption per hour,umol/gram/hr
+Rate.ln,the natural log rate of oxygen consumption,
