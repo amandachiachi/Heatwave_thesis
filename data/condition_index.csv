@@ -1,4 +1,4 @@
-time_period,abalone_ID,weight,shell_length,denominator,CI,size_class,treatment,tank_ID
+period,abalone_ID,weight,shell_length,denominator,CI,size_class,treatment,tank_ID
 receiving,1,0.341229,28.02,21999.07361,1.55E-05,30,hw,8
 receiving,2,0.675513,37.04,50817.45766,1.33E-05,30,hw,15
 receiving,3,0.934677,44.7,89314.623,1.05E-05,30,amb,7

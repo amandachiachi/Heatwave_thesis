@@ -1,0 +1,258 @@
+block,abalone_number,size_class,treatment,weight,volume,chamber.channel,temp,period,BLANK,start.time,stop.time
+A1,ab4_hw_channel2_Trial1_prehw_10_29_20_O2,30,hw,0.85674,623,2,17.5,prehw,0,9:20:00,9:50:00
+A1,ab9_amb_channel6_Trial1_prehw_10_29_20_O2,30,amb,0.451092,628,6,17.5,prehw,0,9:20:00,9:50:00
+A1,ab23_hw_channel5_Trial1_prehw_10_29_20_O2,30,hw,0.4248,629,5,17.5,prehw,0,9:20:00,9:50:00
+A1,ab41_hw_channel4_Trial1_prehw_10_29_20_O2,60,hw,2.599524,602,4,17.5,prehw,0,9:20:00,9:50:00
+A1,ab50_amb_channel8_Trial1_prehw_10_29_20_O2,60,amb,3.464343,601,8,17.5,prehw,0,9:20:00,9:50:00
+A1,ab51_hw_channel10_Trial1_prehw_10_29_20_O2,60,hw,2.245521,614,10,17.5,prehw,0,9:20:00,9:50:00
+A1,ab68_amb_channel1_Trial1_prehw_10_29_20_O2,90,amb,6.610932,574,1,17.5,prehw,0,9:20:00,9:50:00
+A1,ab71_hw_channel9_Trial1_prehw_10_29_20_O2,90,hw,8.069199,556,9,17.5,prehw,0,9:20:00,9:50:00
+A1,ab77_hw_channel3_Trial1_prehw_10_29_20_O2,90,hw,8.06826,565,3,17.5,prehw,0,9:20:00,9:50:00
+A1,blank_channel7_Trial1_prehw_10_29_20_O2,,amb,,650,7,17.5,prehw,1,9:20:00,9:50:00
+A10,ab3_amb_channel9_Trial10_prehw_10_30_20_O2,30,amb,0.932799,623,9,17.5,prehw,0,17:44:00,18:14:00
+A10,ab6_amb_channel7_Trial10_prehw_10_30_20_O2,30,amb,0.768474,623,7,17.5,prehw,0,17:44:00,18:14:00
+A10,ab21_amb_channel2_Trial10_prehw_10_30_20_O2,30,amb,0.456726,619,2,17.5,prehw,0,17:44:00,18:14:00
+A10,ab39_hw_channel8_Trial10_prehw_10_30_20_O2,60,hw,2.352567,616,8,17.5,prehw,0,17:44:00,18:14:00
+A10,ab44_hw_channel4_Trial10_prehw_10_30_20_O2,60,hw,3.358236,604,4,17.5,prehw,0,17:44:00,18:14:00
+A10,ab49_amb_channel10_Trial10_prehw_10_30_20_O2,60,amb,2.986392,605,10,17.5,prehw,0,17:44:00,18:14:00
+A10,ab61_hw_channel5_Trial10_prehw_10_30_20_O2,90,hw,8.05887,558,5,17.5,prehw,0,17:44:00,18:14:00
+A10,ab62_amb_channel1_Trial10_prehw_10_30_20_O2,90,amb,8.299254,552,1,17.5,prehw,0,17:44:00,18:14:00
+A10,ab79_amb_channel3_Trial10_prehw_10_30_20_O2,90,amb,7.57059,563,3,17.5,prehw,0,17:44:00,18:14:00
+A10,blank_channel6_Trial10_prehw_10_30_20_O2,,amb,,650,6,17.5,prehw,1,17:44:00,18:14:00
+A11,ab1_hw_channel3_Trial11_prehw_10_30_20_O2,30,hw,0.346863,623,3,17.5,prehw,0,20:11:00,20:41:00
+A11,ab5_amb_channel4_Trial11_prehw_10_30_20_O2,30,amb,0.643587,625,4,17.5,prehw,0,20:11:00,20:41:00
+A11,ab25_amb_channel7_Trial11_prehw_10_30_20_O2,30,amb,0.516822,627,7,17.5,prehw,0,20:11:00,20:41:00
+A11,ab33_amb_channel5_Trial11_prehw_10_30_20_O2,60,amb,2.720655,606,5,17.5,prehw,0,20:11:00,20:41:00
+A11,ab40_hw_channel2_Trial11_prehw_10_30_20_O2,60,hw,2.401395,601,2,17.5,prehw,0,20:11:00,20:41:00
+A11,ab58_hw_channel9_Trial11_prehw_10_30_20_O2,60,hw,2.370408,656,9,17.5,prehw,0,20:11:00,20:41:00
+A11,ab69_amb_channel8_Trial11_prehw_10_30_20_O2,90,amb,8.195025,555,8,17.5,prehw,0,20:11:00,20:41:00
+A11,ab78_hw_channel1_Trial11_prehw_10_30_20_O2,90,hw,8.022249,563,1,17.5,prehw,0,20:11:00,20:41:00
+A11,ab85_amb_channel10_Trial11_prehw_10_30_20_O2,90,amb,7.707684,565,10,17.5,prehw,0,20:11:00,20:41:00
+A11,blank_channel6_Trial11_prehw_10_30_20_O2,,amb,,650,6,17.5,prehw,1,20:11:00,20:41:00
+A3,ab8_hw_channel8_Trial3_prehw_10_29_20_O2,30,hw,0.902751,627,8,17.5,prehw,0,14:12:00,14:42:00
+A3,ab12_amb_channel10_Trial3_prehw_10_29_20_O2,30,amb,0.775986,628,10,17.5,prehw,0,14:12:00,14:42:00
+A3,ab20_hw_channel9_Trial3_prehw_10_29_20_O2,30,hw,0.714951,619,9,17.5,prehw,0,14:12:00,14:42:00
+A3,ab32_hw_channel7_Trial3_prehw_10_29_20_O2,60,hw,2.721594,605,7,17.5,prehw,0,14:12:00,14:42:00
+A3,ab57_amb_channel3_Trial3_prehw_10_29_20_O2,60,amb,3.069963,607,3,17.5,prehw,0,14:12:00,14:42:00
+A3,ab60_hw_channel2_Trial3_prehw_10_29_20_O2,60,hw,2.154438,610,2,17.5,prehw,0,14:12:00,14:42:00
+A3,ab65_hw_channel4_Trial3_prehw_10_29_20_O2,90,hw,8.480481,544,4,17.5,prehw,0,14:12:00,14:42:00
+A3,ab73_amb_channel1_Trial3_prehw_10_29_20_O2,90,amb,7.910508,565,1,17.5,prehw,0,14:12:00,14:42:00
+A3,ab80_hw_channel5_Trial3_prehw_10_29_20_O2,90,hw,7.568712,569,5,17.5,prehw,0,14:12:00,14:42:00
+A3,blank_channel6_Trial3_prehw_10_29_20_O2,,amb,,630,6,17.5,prehw,1,14:12:00,14:42:00
+A4,ab16_hw_channel10_Trial4_prehw_10_29_20_O2,30,hw,0.691476,631,10,17.5,prehw,0,16:38:00,17:08:00
+A4,ab27_amb_channel1_Trial4_prehw_10_29_20_O2,30,amb,0.523395,631,1,17.5,prehw,0,16:38:00,17:08:00
+A4,ab29_amb_channel2_Trial4_prehw_10_29_20_O2,30,amb,0.464238,618,2,17.5,prehw,0,16:38:00,17:08:00
+A4,ab35_amb_channel4_Trial4_prehw_10_29_20_O2,60,amb,2.438016,610,4,17.5,prehw,0,16:38:00,17:08:00
+A4,ab42_amb_channel6_Trial4_prehw_10_29_20_O2,60,amb,2.82864,615,6,17.5,prehw,0,16:38:00,17:08:00
+A4,ab46_amb_channel8_Trial4_prehw_10_29_20_O2,60,amb,2.982636,605,8,17.5,prehw,0,16:38:00,17:08:00
+A4,ab75_hw_channel9_Trial4_prehw_10_29_20_O2,90,hw,8.758425,555,9,17.5,prehw,0,16:38:00,17:08:00
+A4,ab76_amb_channel3_Trial4_prehw_10_29_20_O2,90,amb,7.387485,570,3,17.5,prehw,0,16:38:00,17:08:00
+A4,ab89_hw_channel7_Trial4_prehw_10_29_20_O2,90,hw,7.919898,567,7,17.5,prehw,0,16:38:00,17:08:00
+A4,blank_channel5_Trial4_prehw_10_29_20_O2,,amb,,650,5,17.5,prehw,1,16:38:00,17:08:00
+A5,ab11_hw_channel3_Trial5_prehw_10_29_20_O2,30,hw,0.479262,627,3,17.5,prehw,0,18:36:00,19:06:00
+A5,ab14_amb_channel7_Trial5_prehw_10_29_20_O2,30,amb,0.591003,630,7,17.5,prehw,0,18:36:00,19:06:00
+A5,ab18_amb_channel5_Trial5_prehw_10_29_20_O2,30,amb,0.729975,626,5,17.5,prehw,0,18:36:00,19:06:00
+A5,ab34_amb_channel9_Trial5_prehw_10_29_20_O2,60,amb,2.664315,562,9,17.5,prehw,0,18:36:00,19:06:00
+A5,ab37_amb_channel1_Trial5_prehw_10_29_20_O2,60,amb,2.779812,605,1,17.5,prehw,0,18:36:00,19:06:00
+A5,ab54_hw_channel8_Trial5_prehw_10_29_20_O2,60,hw,2.839908,609,8,17.5,prehw,0,18:36:00,19:06:00
+A5,ab66_amb_channel6_Trial5_prehw_10_29_20_O2,90,amb,7.328328,577,6,17.5,prehw,0,18:36:00,19:06:00
+A5,ab74_amb_channel10_Trial5_prehw_10_29_20_O2,90,amb,7.952763,572,10,17.5,prehw,0,18:36:00,19:06:00
+A5,ab86_hw_channel4_Trial5_prehw_10_29_20_O2,90,hw,9.895554,517,4,17.5,prehw,0,18:36:00,19:06:00
+A5,blank_channel2_Trial5_prehw_10_29_20_O2,,amb,,650,2,17.5,prehw,1,18:36:00,19:06:00
+A6,ab10_hw_channel9_Trial6_prehw_10_30_20_O2,30,hw,0.708378,625,9,17.5,prehw,0,9:42:00,10:12:00
+A6,ab13_hw_channel3_Trial6_prehw_10_30_20_O2,30,hw,0.924348,615,3,17.5,prehw,0,9:42:00,10:12:00
+A6,ab30_amb_channel10_Trial6_prehw_10_30_20_O2,30,amb,0.53748,630,10,17.5,prehw,0,9:42:00,10:12:00
+A6,ab43_hw_channel7_Trial6_prehw_10_30_20_O2,60,hw,2.911272,604,7,17.5,prehw,0,9:42:00,10:12:00
+A6,ab52_hw_channel1_Trial6_prehw_10_30_20_O2,60,hw,2.79108,607,1,17.5,prehw,0,9:42:00,10:12:00
+A6,ab53_hw_channel8_Trial6_prehw_10_30_20_O2,60,hw,2.402334,605,8,17.5,prehw,0,9:42:00,10:12:00
+A6,ab63_amb_channel2_Trial6_prehw_10_30_20_O2,90,amb,7.810974,557,2,17.5,prehw,0,9:42:00,10:12:00
+A6,ab72_hw_channel5_Trial6_prehw_10_30_20_O2,90,hw,8.417568,562,5,17.5,prehw,0,9:42:00,10:12:00
+A6,ab90_hw_channel4_Trial6_prehw_10_30_20_O2,90,hw,7.697355,570,4,17.5,prehw,0,9:42:00,10:12:00
+A6,blank_channel6_Trial6_prehw_10_30_20_O2,,amb,,650,6,17.5,prehw,1,9:42:00,10:12:00
+A7,ab7_amb_channel7_Trial7_prehw_10_30_20_O2,30,amb,0.602271,625,7,17.5,prehw,0,11:35:00,12:05:00
+A7,ab22_hw_channel10_Trial7_prehw_10_30_20_O2,30,hw,0.879276,625,10,17.5,prehw,0,11:35:00,12:05:00
+A7,ab26_amb_channel6_Trial7_prehw_10_30_20_O2,30,amb,0.75345,618,6,17.5,prehw,0,11:35:00,12:05:00
+A7,ab38_hw_channel3_Trial7_prehw_10_30_20_O2,60,hw,2.41548,607,3,17.5,prehw,0,11:35:00,12:05:00
+A7,ab47_amb_channel5_Trial7_prehw_10_30_20_O2,60,amb,3.111279,604,5,17.5,prehw,0,11:35:00,12:05:00
+A7,ab56_amb_channel1_Trial7_prehw_10_30_20_O2,60,amb,2.91315,605,1,17.5,prehw,0,11:35:00,12:05:00
+A7,ab64_amb_channel2_Trial7_prehw_10_30_20_O2,90,amb,7.254147,558,2,17.5,prehw,0,11:35:00,12:05:00
+A7,ab82_hw_channel4_Trial7_prehw_10_30_20_O2,90,hw,7.426923,562,4,17.5,prehw,0,11:35:00,12:05:00
+A7,ab84_hw_channel9_Trial7_prehw_10_30_20_O2,90,hw,8.238219,553,9,17.5,prehw,0,11:35:00,12:05:00
+A7,blank_channel8_Trial7_prehw_10_30_20_O2,,amb,,650,8,17.5,prehw,1,11:35:00,12:05:00
+A8,ab15_hw_channel7_Trial8_prehw_10_30_20_O2,30,hw,0.859557,625,7,17.5,prehw,0,13:45:00,14:15:00
+A8,ab19_amb_channel1_Trial8_prehw_10_30_20_O2,30,amb,0.449214,625,1,17.5,prehw,0,13:45:00,14:15:00
+A8,ab24_hw_channel6_Trial8_prehw_10_30_20_O2,30,hw,0.843594,633,6,17.5,prehw,0,13:45:00,14:15:00
+A8,ab31_amb_channel5_Trial8_prehw_10_30_20_O2,60,amb,2.699058,605,5,17.5,prehw,0,13:45:00,14:15:00
+A8,ab48_amb_channel3_Trial8_prehw_10_30_20_O2,60,amb,2.36853,610,3,17.5,prehw,0,13:45:00,14:15:00
+A8,ab59_amb_channel4_Trial8_prehw_10_30_20_O2,60,amb,2.701875,610,4,17.5,prehw,0,13:45:00,14:15:00
+A8,ab81_amb_channel10_Trial8_prehw_10_30_20_O2,90,amb,7.629747,568,10,17.5,prehw,0,13:45:00,14:15:00
+A8,ab87_amb_channel2_Trial8_prehw_10_30_20_O2,90,amb,7.725525,562,2,17.5,prehw,0,13:45:00,14:15:00
+A8,ab88_amb_channel9_Trial8_prehw_10_30_20_O2,90,amb,8.704902,556,9,17.5,prehw,0,13:45:00,14:15:00
+A8,blank_channel8_Trial8_prehw_10_30_20_O2,,amb,,650,8,17.5,prehw,1,13:45:00,14:15:00
+A9,ab2_hw_channel7_Trial9_prehw_10_30_20_O2,30,hw,0.629502,625,7,17.5,prehw,0,15:54:00,16:24:00
+A9,ab17_hw_channel8_Trial9_prehw_10_30_20_O2,30,hw,0.439824,628,8,17.5,prehw,0,15:54:00,16:24:00
+A9,ab28_hw_channel4_Trial9_prehw_10_30_20_O2,30,hw,0.622929,620,4,17.5,prehw,0,15:54:00,16:24:00
+A9,ab36_amb_channel3_Trial9_prehw_10_30_20_O2,60,amb,2.839908,606,3,17.5,prehw,0,15:54:00,16:24:00
+A9,ab45_hw_channel6_Trial9_prehw_10_30_20_O2,60,hw,2.597646,610,6,17.5,prehw,0,15:54:00,16:24:00
+A9,ab55_hw_channel5_Trial9_prehw_10_30_20_O2,60,hw,2.683095,609,5,17.5,prehw,0,15:54:00,16:24:00
+A9,ab67_hw_channel1_Trial9_prehw_10_30_20_O2,90,hw,7.456032,566,1,17.5,prehw,0,15:54:00,16:24:00
+A9,ab70_hw_channel2_Trial9_prehw_10_30_20_O2,90,hw,7.979055,559,2,17.5,prehw,0,15:54:00,16:24:00
+A9,ab83_amb_channel9_Trial9_prehw_10_30_20_O2,90,amb,7.775292,566,9,17.5,prehw,0,15:54:00,16:24:00
+A9,blank_channel10_Trial9_prehw_10_30_20_O2,,amb,,650,10,17.5,prehw,1,15:54:00,16:24:00
+B1,ab1_hw_channel10_Trial1_posthw_11_24_20_O2,30,hw,0.401325,631,10,21,posthw,0,13:30:00,14:00:00
+B1,ab2_hw_channel3_Trial1_posthw_11_24_20_O2,30,hw,0.683964,633,3,21,posthw,0,13:30:00,14:00:00
+B1,ab23_hw_channel5_Trial1_posthw_11_24_20_O2,30,hw,0.475506,635,5,21,posthw,0,13:30:00,14:00:00
+B1,ab41_hw_channel4_Trial1_posthw_11_24_20_O2,60,hw,2.801409,616,4,21,posthw,0,13:30:00,14:00:00
+B1,ab45_hw_channel8_Trial1_posthw_11_24_20_O2,60,hw,2.707509,610,8,21,posthw,0,13:30:00,14:00:00
+B1,ab58_hw_channel9_Trial1_posthw_11_24_20_O2,60,hw,3.029586,611,9,21,posthw,0,13:30:00,14:00:00
+B1,ab61_hw_channel6_Trial1_posthw_11_24_20_O2,90,hw,7.790316,573,6,21,posthw,0,13:30:00,14:00:00
+B1,ab71_hw_channel1_Trial1_posthw_11_24_20_O2,90,hw,7.819425,557,1,21,posthw,0,13:30:00,14:00:00
+B1,ab78_hw_channel7_Trial1_posthw_11_24_20_O2,90,hw,7.475751,575,7,21,posthw,0,13:30:00,14:00:00
+B1,blank_hw_channel2_Trial1_posthw_11_24_20_O2,,hw,,650,2,21,posthw,1,13:30:00,14:00:00
+B2,ab8_hw_channel7_Trial2_posthw_11_24_20_O2,30,hw,1.036089,630,7,21,posthw,0,15:32:00,16:02:00
+B2,ab17_hw_channel5_Trial2_posthw_11_24_20_O2,30,hw,0.491469,638,5,21,posthw,0,15:32:00,16:02:00
+B2,ab20_hw_channel3_Trial2_posthw_11_24_20_O2,30,hw,0.907446,632,3,21,posthw,0,15:32:00,16:02:00
+B2,ab39_hw_channel1_Trial2_posthw_11_24_20_O2,60,hw,2.550696,610,1,21,posthw,0,15:32:00,16:02:00
+B2,ab40_hw_channel9_Trial2_posthw_11_24_20_O2,60,hw,2.853054,616,9,21,posthw,0,15:32:00,16:02:00
+B2,ab60_hw_channel2_Trial2_posthw_11_24_20_O2,60,hw,2.347872,611,2,21,posthw,0,15:32:00,16:02:00
+B2,ab70_hw_channel8_Trial2_posthw_11_24_20_O2,90,hw,7.426923,576,8,21,posthw,0,15:32:00,16:02:00
+B2,ab75_hw_channel6_Trial2_posthw_11_24_20_O2,90,hw,7.505799,572,6,21,posthw,0,15:32:00,16:02:00
+B2,ab80_hw_channel10_Trial2_posthw_11_24_20_O2,90,hw,7.428801,575,10,21,posthw,0,15:32:00,16:02:00
+B2,blank_hw_channel4_Trial2_posthw_11_24_20_O2,,hw,,650,4,21,posthw,1,15:32:00,16:02:00
+B3,ab5_amb_channel9_Trial3_posthw_11_24_20_O2,30,amb,0.783498,635,9,17.5,posthw,0,17:33:00,18:06:00
+B3,ab9_amb_channel8_Trial3_posthw_11_24_20_O2,30,amb,0.544053,636,8,17.5,posthw,0,17:33:00,18:06:00
+B3,ab25_amb_channel2_Trial3_posthw_11_24_20_O2,30,amb,0.702744,626,2,17.5,posthw,0,17:33:00,18:06:00
+B3,ab33_amb_channel7_Trial3_posthw_11_24_20_O2,60,amb,2.661498,612,7,17.5,posthw,0,17:33:00,18:06:00
+B3,ab50_amb_channel3_Trial3_posthw_11_24_20_O2,60,amb,4.249347,600,3,17.5,posthw,0,17:33:00,18:06:00
+B3,ab57_amb_channel4_Trial3_posthw_11_24_20_O2,60,amb,3.112218,617,4,17.5,posthw,0,17:33:00,18:06:00
+B3,ab68_amb_channel5_Trial3_posthw_11_24_20_O2,90,amb,7.168698,577,5,17.5,posthw,0,17:33:00,18:06:00
+B3,ab69_amb_channel1_Trial3_posthw_11_24_20_O2,90,amb,8.981907,567,1,17.5,posthw,0,17:33:00,18:06:00
+B3,ab85_amb_channel6_Trial3_posthw_11_24_20_O2,90,amb,8.026944,571,6,17.5,posthw,0,17:33:00,18:06:00
+B3,blank_amb_channel10_Trial3_posthw_11_24_20_O2,,amb,,650,10,17.5,posthw,1,17:33:00,18:06:00
+B4,ab12_amb_channel2_Trial4_posthw_11_24_20_O2,30,amb,0.96942,625,2,17.5,posthw,0,19:32:00,20:02:00
+B4,ab27_amb_channel8_Trial4_posthw_11_24_20_O2,30,amb,0.595698,635,8,17.5,posthw,0,19:32:00,20:02:00
+B4,ab29_amb_channel1_Trial4_posthw_11_24_20_O2,30,amb,0.547809,630,1,17.5,posthw,0,19:32:00,20:02:00
+B4,ab35_amb_channel6_Trial4_posthw_11_24_20_O2,60,amb,2.661498,615,6,17.5,posthw,0,19:32:00,20:02:00
+B4,ab42_amb_channel9_Trial4_posthw_11_24_20_O2,60,amb,3.064329,614,9,17.5,posthw,0,19:32:00,20:02:00
+B4,ab48_amb_channel4_Trial4_posthw_11_24_20_O2,60,amb,2.486844,613,4,17.5,posthw,0,19:32:00,20:02:00
+B4,ab73_amb_channel3_Trial4_posthw_11_24_20_O2,90,amb,8.082345,570,3,17.5,posthw,0,19:32:00,20:02:00
+B4,ab74_amb_channel5_Trial4_posthw_11_24_20_O2,90,amb,8.502078,572,5,17.5,posthw,0,19:32:00,20:02:00
+B4,ab76_amb_channel7_Trial4_posthw_11_24_20_O2,90,amb,7.987506,570,7,17.5,posthw,0,19:32:00,20:02:00
+B4,blank_amb_channel10_Trial4_posthw_11_24_20_O2,,amb,,650,10,17.5,posthw,1,19:32:00,20:02:00
+B5,ab11_hw_channel3_Trial5_posthw_11_25_20_O2,30,hw,0.559077,639,3,21,posthw,0,11:15:00,11:45:00
+B5,ab22_hw_channel5_Trial5_posthw_11_25_20_O2,30,hw,0.917775,630,5,21,posthw,0,11:15:00,11:45:00
+B5,ab24_hw_channel9_Trial5_posthw_11_25_20_O2,30,hw,0.968481,634,9,21,posthw,0,11:15:00,11:45:00
+B5,ab43_hw_channel10_Trial5_posthw_11_25_20_O2,60,hw,3.22302,614,10,21,posthw,0,11:15:00,11:45:00
+B5,ab52_hw_channel8_Trial5_posthw_11_25_20_O2,60,hw,2.792958,615,8,21,posthw,0,11:15:00,11:45:00
+B5,ab55_hw_channel1_Trial5_posthw_11_25_20_O2,60,hw,2.838969,610,1,21,posthw,0,11:15:00,11:45:00
+B5,ab82_hw_channel2_Trial5_posthw_11_25_20_O2,90,hw,7.187478,573,2,21,posthw,0,11:15:00,11:45:00
+B5,ab86_hw_channel6_Trial5_posthw_11_25_20_O2,90,hw,7.733037,575,6,21,posthw,0,11:15:00,11:45:00
+B5,ab89_hw_channel4_Trial5_posthw_11_25_20_O2,90,hw,7.442886,579,4,21,posthw,0,11:15:00,11:45:00
+B5,blank_hw_channel7_Trial5_posthw_11_25_20_O2,,hw,0.0492,650,7,21,posthw,1,11:15:00,11:45:00
+B6,ab38_hw_channel1_Trial6_posthw_11_25_20_O2,60,hw,2.587317,614,1,21,posthw,0,12:46:00,13:16:00
+B6,ab72_hw_channel4_Trial6_posthw_11_25_20_O2,90,hw,7.684209,566,4,21,posthw,0,12:46:00,13:16:00
+B6,ab84_hw_channel2_Trial6_posthw_11_25_20_O2,90,hw,7.765902,565,2,21,posthw,0,12:46:00,13:16:00
+B6,blank_hw_channel10_Trial6_posthw_11_25_20_O2,,hw,,650,10,21,posthw,1,12:46:00,13:16:00
+B7,ab14_amb_channel7_Trial7_posthw_11_25_20_O2,30,amb,0.694293,634,7,17.5,posthw,0,15:04:00,15:34:00
+B7,ab18_amb_channel1_Trial7_posthw_11_25_20_O2,30,amb,0.932799,631,1,17.5,posthw,0,15:04:00,15:34:00
+B7,ab30_amb_channel4_Trial7_posthw_11_25_20_O2,30,amb,0.720585,628,4,17.5,posthw,0,15:04:00,15:34:00
+B7,ab34_amb_channel5_Trial7_posthw_11_25_20_O2,60,amb,2.987331,615,5,17.5,posthw,0,15:04:00,15:34:00
+B7,ab37_amb_channel3_Trial7_posthw_11_25_20_O2,60,amb,3.115035,608,3,17.5,posthw,0,15:04:00,15:34:00
+B7,ab47_amb_channel9_Trial7_posthw_11_25_20_O2,60,amb,3.609888,605,9,17.5,posthw,0,15:04:00,15:34:00
+B7,ab63_amb_channel2_Trial7_posthw_11_25_20_O2,90,amb,8.755608,559,2,17.5,posthw,0,15:04:00,15:34:00
+B7,ab64_amb_channel8_Trial7_posthw_11_25_20_O2,90,amb,7.661673,574,8,17.5,posthw,0,15:04:00,15:34:00
+B7,ab66_amb_channel10_Trial7_posthw_11_25_20_O2,90,amb,7.071042,579,10,17.5,posthw,0,15:04:00,15:34:00
+B7,blank_amb_channel6_Trial7_posthw_11_25_20_O2,,amb,,650,6,17.5,posthw,1,15:04:00,15:34:00
+B8,ab7_amb_channel7_Trial8_posthw_11_25_20_O2,30,amb,0.68772,631,7,17.5,posthw,0,17:21:00,17:51:00
+B8,ab19_amb_channel3_Trial8_posthw_11_25_20_O2,30,amb,0.517761,638,3,17.5,posthw,0,17:21:00,17:51:00
+B8,ab26_amb_channel4_Trial8_posthw_11_25_20_O2,30,amb,0.851106,632,4,17.5,posthw,0,17:21:00,17:51:00
+B8,ab31_amb_channel1_Trial8_posthw_11_25_20_O2,60,amb,3.054939,610,1,17.5,posthw,0,17:21:00,17:51:00
+B8,ab56_amb_channel5_Trial8_posthw_11_25_20_O2,60,amb,3.102828,614,5,17.5,posthw,0,17:21:00,17:51:00
+B8,ab59_amb_channel6_Trial8_posthw_11_25_20_O2,60,amb,2.59389,621,6,17.5,posthw,0,17:21:00,17:51:00
+B8,ab81_amb_channel9_Trial8_posthw_11_25_20_O2,90,amb,7.427862,578,9,17.5,posthw,0,17:21:00,17:51:00
+B8,ab87_amb_channel10_Trial8_posthw_11_25_20_O2,90,amb,7.253208,585,10,17.5,posthw,0,17:21:00,17:51:00
+B8,ab88_amb_channel2_Trial8_posthw_11_25_20_O2,90,amb,8.520858,565,2,17.5,posthw,0,17:21:00,17:51:00
+B8,blank_amb_channel8_Trial8_posthw_11_25_20_O2,,amb,,650,8,17.5,posthw,1,17:21:00,17:51:00
+B9,ab3_amb_channel2_Trial9_posthw_11_25_20_O2,30,amb,1.090551,624,2,17.5,posthw,0,20:50:00,21:20:00
+B9,ab6_amb_channel10_Trial9_posthw_11_25_20_O2,30,amb,0.970359,626,10,17.5,posthw,0,20:50:00,21:20:00
+B9,ab21_amb_channel7_Trial9_posthw_11_25_20_O2,30,amb,0.532785,633,7,17.5,posthw,0,20:50:00,21:20:00
+B9,ab36_amb_channel4_Trial9_posthw_11_25_20_O2,60,amb,2.912211,616,4,17.5,posthw,0,20:50:00,21:20:00
+B9,ab46_amb_channel8_Trial9_posthw_11_25_20_O2,60,amb,3.261519,610,8,17.5,posthw,0,20:50:00,21:20:00
+B9,ab49_amb_channel1_Trial9_posthw_11_25_20_O2,60,amb,3.198606,605,1,17.5,posthw,0,20:50:00,21:20:00
+B9,ab62_amb_channel3_Trial9_posthw_11_25_20_O2,90,amb,8.023188,575,3,17.5,posthw,0,20:50:00,21:20:00
+B9,ab79_amb_channel6_Trial9_posthw_11_25_20_O2,90,amb,7.368705,580,6,17.5,posthw,0,20:50:00,21:20:00
+B9,ab83_amb_channel5_Trial9_posthw_11_25_20_O2,90,amb,7.910508,573,5,17.5,posthw,0,20:50:00,21:20:00
+B9,blank_amb_channel9_Trial9_posthw_11_25_20_O2,,amb,,650,9,17.5,posthw,1,20:50:00,21:20:00
+C1,ab17_hw_channel1_trial1_final_12_11_20_O2,30,hw,0.526212,615,1,17.5,final ,0,10:13:00,10:45:00
+C1,ab23_hw_channel3_trial1_final_12_11_20_O2.csv,30,hw,0.498981,635,3,17.5,final ,0,10:13:00,10:45:00
+C1,ab24_hw_channel7_trial1_final_12_11_20_O2,30,hw,1.055808,628,7,17.5,final ,0,10:13:00,10:45:00
+C1,ab39_hw_channel9_trial1_final_12_11_20_O2,60,hw,2.356323,619,9,17.5,final ,0,10:13:00,10:45:00
+C1,ab40_hw_channel4_trial1_final_12_11_20_O2,60,hw,2.70657,613,4,17.5,final ,0,10:13:00,10:45:00
+C1,ab55_hw_channel10_trial1_final_12_11_20_O2,60,hw,3.083109,615,10,17.5,final ,0,10:13:00,10:45:00
+C1,ab71_hw_channel8_trial1_final_12_11_20_O2,90,hw,7.882338,577,8,17.5,final ,0,10:13:00,10:45:00
+C1,ab75_hw_channel5_trial1_final_12_11_20_O2,90,hw,8.073894,566,5,17.5,final ,0,10:13:00,10:45:00
+C1,ab84_hw_channel2_trial1_final_12_11_20_O2,90,hw,7.497348,560,2,17.5,final ,0,10:13:00,10:45:00
+C1,blank_hw_channel6_trial1_final_12_11_20_O2,,hw,,650,6,17.5,final ,1,10:13:00,10:45:00
+C2,ab8_hw_channel10_trial2_final_12_11_20_O2,30,hw,1.068015,631,10,17.5,final ,0,11:57:00,12:27:00
+C2,ab20_hw_channel4_trial2_final_12_11_20_O2,30,hw,0.907446,633,4,17.5,final ,0,11:57:00,12:27:00
+C2,ab41_hw_channel7_trial2_final_12_11_20_O2,60,hw,2.792958,613,7,17.5,final ,0,11:57:00,12:27:00
+C2,blank_hw_channel9_trial2_final_12_11_20_O2,,hw,,650,9,17.5,final ,1,11:57:00,12:27:00
+C3,ab6_amb_channel8_trial3_final_12_11_20_O2,30,amb,1.113087,630,8,17.5,final ,0,13:34:00,14:04:00
+C3,ab18_amb_channel3_trial3_final_12_11_20_O2,30,amb,0.991017,628,3,17.5,final ,0,13:34:00,14:04:00
+C3,ab30_amb_channel10_trial3_final_12_11_20_O2,30,amb,0.805095,634,10,17.5,final ,0,13:34:00,14:04:00
+C3,ab37_amb_channel6_trial3_final_12_11_20_O2,60,amb,3.155412,613,6,17.5,final ,0,13:34:00,14:04:00
+C3,ab42_amb_channel9_trial3_final_12_11_20_O2,60,amb,3.337578,609,9,17.5,final ,0,13:34:00,14:04:00
+C3,ab56_amb_channel5_trial3_final_12_11_20_O2,60,amb,3.183582,610,5,17.5,final ,0,13:34:00,14:04:00
+C3,ab68_amb_channel2_trial3_final_12_11_20_O2,90,amb,7.27011,570,2,17.5,final ,0,13:34:00,14:04:00
+C3,ab79_amb_channel7_trial3_final_12_11_20_O2,90,amb,7.207197,582,7,17.5,final ,0,13:34:00,14:04:00
+C3,ab88_amb_channel1_trial3_final_12_11_20_O2,90,amb,8.515224,564,1,17.5,final ,0,13:34:00,14:04:00
+C3,blank_amb_channel4_trial3_final_12_11_20_O2,,amb,,650,4,17.5,final ,1,13:34:00,14:04:00
+C4,ab12_amb_channel7_trial4_final_12_11_20_O2,30,amb,1.11966,625,7,17.5,final ,0,15:34:00,16:04:00
+C4,ab14_amb_channel6_trial4_final_12_11_20_O2,30,amb,0.758145,631,6,17.5,final ,0,15:34:00,16:04:00
+C4,ab25_amb_channel9_trial4_final_12_11_20_O2,30,amb,0.749694,631,9,17.5,final ,0,15:34:00,16:04:00
+C4,ab46_amb_channel4_trial4_final_12_11_20_O2,60,amb,3.509415,612,4,17.5,final ,0,15:34:00,16:04:00
+C4,ab48_amb_channel5_trial4_final_12_11_20_O2,60,amb,2.709387,613,5,17.5,final ,0,15:34:00,16:04:00
+C4,ab59_amb_channel1_trial4_final_12_11_20_O2,60,amb,3.099072,609,1,17.5,final ,0,15:34:00,16:04:00
+C4,ab62_amb_channel3_trial4_final_12_11_20_O2,90,amb,7.967787,571,3,17.5,final ,0,15:34:00,16:04:00
+C4,ab76_amb_channel2_trial4_final_12_11_20_O2,90,amb,7.753695,568,2,17.5,final ,0,15:34:00,16:04:00
+C4,ab81_amb_channel8_trial4_final_12_11_20_O2,90,amb,7.446642,575,8,17.5,final ,0,15:34:00,16:04:00
+C4,blank_amb_channel10_trial4_final_12_11_20_O2,,amb,,650,10,17.5,final ,1,15:34:00,16:04:00
+C5,ab1_hw_channel10_trial5_final_12_12_20_O2,30,hw,0.445458,639,10,17.5,final ,0,9:21:00,9:51:00
+C5,ab2_hw_channel3_trial5_final_12_12_20_O2,30,hw,0.737487,634,3,17.5,final ,0,9:21:00,9:51:00
+C5,ab22_hw_channel5_trial5_final_12_12_20_O2,30,hw,0.954396,632,5,17.5,final ,0,9:21:00,9:51:00
+C5,ab43_hw_channel9_trial5_final_12_12_20_O2,60,hw,3.031464,615,9,17.5,final ,0,9:21:00,9:51:00
+C5,ab52_hw_channel6_trial5_final_12_12_20_O2,60,hw,2.818311,616,6,17.5,final ,0,9:21:00,9:51:00
+C5,ab60_hw_channel4_trial5_final_12_12_20_O2,60,hw,2.268057,620,4,17.5,final ,0,9:21:00,9:51:00
+C5,ab70_hw_channel7_trial5_final_12_12_20_O2,90,hw,7.363071,575,7,17.5,final ,0,9:21:00,9:51:00
+C5,ab82_hw_channel8_trial5_final_12_12_20_O2,90,hw,7.503921,577,8,17.5,final ,0,9:21:00,9:51:00
+C5,blank_hw_channel2_trial5_final_12_12_20_O2,,hw,,650,2,17.5,final ,1,9:21:00,9:51:00
+C6,ab9_amb_channel8_trial6_final_12_12_20_O2,30,amb,0.574101,636,8,17.5,final ,0,11:07:00,11:42:00
+C6,ab19_amb_channel7_trial6_final_12_12_20_O2,30,amb,0.56565,630,7,17.5,final ,0,11:07:00,11:42:00
+C6,ab26_amb_channel3_trial6_final_12_12_20_O2,30,amb,0.905568,633,3,17.5,final ,0,11:07:00,11:42:00
+C6,ab31_amb_channel10_trial6_final_12_12_20_O2,60,amb,3.209874,615,10,17.5,final ,0,11:07:00,11:42:00
+C6,ab36_amb_channel6_trial6_final_12_12_20_O2,60,amb,2.356323,609,6,17.5,final ,0,11:07:00,11:42:00
+C6,ab50_amb_channel1_trial6_final_12_12_20_O2,60,amb,4.215543,598,1,17.5,final ,0,11:07:00,11:42:00
+C6,ab66_amb_channel2_trial6_final_12_12_20_O2,90,amb,7.412838,569,2,17.5,final ,0,11:07:00,11:42:00
+C6,ab74_amb_channel4_trial6_final_12_12_20_O2,90,amb,8.005347,577,4,17.5,final ,0,11:07:00,11:42:00
+C6,ab87_amb_channel5_trial6_final_12_12_20_O2,90,amb,7.830693,582,5,17.5,final ,0,11:07:00,11:42:00
+C6,blank_amb_channel9_trial6_final_12_12_20_O2,,amb,,650,9,17.5,final ,1,11:07:00,11:42:00
+C7,ab3_amb_channel1_trial7_final_12_12_20_O2,30,amb,1.132806,620,1,17.5,final ,0,13:00:00,13:30:00
+C7,ab21_amb_channel7_trial7_final_12_12_20_O2,30,amb,0.489591,634,7,17.5,final ,0,13:00:00,13:30:00
+C7,ab27_amb_channel9_trial7_final_12_12_20_O2,30,amb,0.617295,633,9,17.5,final ,0,13:00:00,13:30:00
+C7,ab33_amb_channel3_trial7_final_12_12_20_O2,60,amb,2.792958,609,3,17.5,final ,0,13:00:00,13:30:00
+C7,ab47_amb_channel10_trial7_final_12_12_20_O2,60,amb,3.972342,606,10,17.5,final ,0,13:00:00,13:30:00
+C7,ab49_amb_channel4_trial7_final_12_12_20_O2,60,amb,3.473733,599,4,17.5,final ,0,13:00:00,13:30:00
+C7,ab64_amb_channel6_trial7_final_12_12_20_O2,90,amb,6.681357,584,6,17.5,final ,0,13:00:00,13:30:00
+C7,ab69_amb_channel2_trial7_final_12_12_20_O2,90,amb,7.717074,613,2,17.5,final ,0,13:00:00,13:30:00
+C7,ab85_amb_channel5_trial7_final_12_12_20_O2,90,amb,7.806279,577,5,17.5,final ,0,13:00:00,13:30:00
+C7,blank_amb_channel8_trial7_final_12_12_20_O2,,amb,,650,8,17.5,final ,1,13:00:00,13:30:00
+C8,ab5_amb_channel10_trial8_final_12_12_20_O2,30,amb,0.774108,635,10,17.5,final ,0,15:18:00,15:48:00
+C8,ab7_amb_channel1_trial8_final_12_12_20_O2,30,amb,0.745938,628,1,17.5,final ,0,15:18:00,15:48:00
+C8,ab29_amb_channel7_trial8_final_12_12_20_O2,30,amb,0.591003,631,7,17.5,final ,0,15:18:00,15:48:00
+C8,ab34_amb_channel2_trial8_final_12_12_20_O2,60,amb,3.177948,607,2,17.5,final ,0,15:18:00,15:48:00
+C8,ab35_amb_channel4_trial8_final_12_12_20_O2,60,amb,2.846481,612,4,17.5,final ,0,15:18:00,15:48:00
+C8,ab57_amb_channel9_trial8_final_12_12_20_O2,60,amb,3.081231,613,9,17.5,final ,0,15:18:00,15:48:00
+C8,ab63_amb_channel5_trial8_final_12_12_20_O2,90,amb,7.450398,579,5,17.5,final ,0,15:18:00,15:48:00
+C8,ab73_amb_channel8_trial8_final_12_12_20_O2,90,amb,8.116149,575,8,17.5,final ,0,15:18:00,15:48:00
+C8,ab83_amb_channel3_trial8_final_12_12_20_O2,90,amb,7.391241,576,3,17.5,final ,0,15:18:00,15:48:00
+C8,blank_amb_channel6_trial8_final_12_12_20_O2,,amb,,650,6,17.5,final ,1,15:18:00,15:48:00
