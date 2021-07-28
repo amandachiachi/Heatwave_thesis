@@ -44,6 +44,7 @@ allrates%>%
 which(allrates$shell_length>600)
 allrates[101,]
 # abalone 46 
+# fixed! 
 
 #go back to group projects -- goes over how to look at 
 
@@ -68,14 +69,18 @@ summarypchange<- percentchange%>%
             resp_final_avgpchange=mean(respopchange_final),
             resp_final_sepchange=sd(respopchange_final)/sqrt(n()))
 #### Analysis for change in weight and change in shell length####
+# weight model
 weightmodel<- lm(weightpchange ~size_class*treatment, data= percentchange)
 check_model(weightmodel)
 # checked the model and everything looks normal 
-
 anova(weightmodel)
-#finish the analysis 
+# length model
+lengthmodel<- lm(shellpchange ~size_class*treatment, data = percentchange)
+check_model(lengthmodel)
+# checked the model and everything looks normal
+anova(lengthmodel)
 
-# Now we will make a ggplot, still need to clean up 
+##### Plotting weight, length, and respiration at two time points ####
 # weight plot 
 weight_plot <- summarypchange%>%
   ggplot(aes(x = size_class, y = weight_avgpchange, color = treatment))+
@@ -83,22 +88,24 @@ weight_plot <- summarypchange%>%
   geom_errorbar(aes(ymin = weight_avgpchange - weight_sepchange, ymax = weight_avgpchange + weight_sepchange), width = 0.2)
 
 # length plot 
-# analysis 
-
+length_plot <- summarypchange%>%
+  ggplot(aes(x = size_class, y = shell_avgpchange, color = treatment))+
+  geom_point()+
+  geom_errorbar(aes(ymin = shell_avgpchange - shell_sepchange, ymax = shell_avgpchange + shell_sepchange), width = 0.2)
+# check to see if this is correct
 # after this, if clean we can write it
 
+
 # re-do survivorship curve
-# diet data --> normalized by weight 
-# allrates group by tank and get the sum of weights -- 
-# lefjoin by tank id so you have a column with summed weights by tank 
-# (look at code I chatted with with jenn)
 
 
+# calculate diet data normalized by weight 
+# similar to my code that Jenn helped me with
 weightsum<- allrates%>%
-  group_by(tank_ID,period)%>%
-  summarise(Ab_weight_sum = sum(weight)) %>%
-  filter(period=="final")
-dietrates<-dietrates%>%
-  left_join(weightsum)
+  group_by(tank_ID,period)%>% 
+  summarise(Ab_weight_sum = sum(weight)) %>% # get the sum of weights in each tank
+  filter(period=="final") # only want final weights
+dietrates<-dietrates%>% 
+  left_join(weightsum) # creates a column with summed weights by tank 
 
-#data analysis 
+# data analysis 

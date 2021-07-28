@@ -148,7 +148,7 @@ B5,ab55_hw_channel1_Trial5_posthw_11_25_20_O2,60,hw,2.838969,610,1,21,posthw,0
 B5,ab82_hw_channel2_Trial5_posthw_11_25_20_O2,90,hw,7.187478,573,2,21,posthw,0
 B5,ab86_hw_channel6_Trial5_posthw_11_25_20_O2,90,hw,7.733037,575,6,21,posthw,0
 B5,ab89_hw_channel4_Trial5_posthw_11_25_20_O2,90,hw,7.442886,579,4,21,posthw,0
-B5,blank_hw_channel7_Trial5_posthw_11_25_20_O2,,hw,0.0492,650,7,21,posthw,1
+B5,blank_hw_channel7_Trial5_posthw_11_25_20_O2,,hw,,650,7,21,posthw,1
 B6,ab38_hw_channel1_Trial6_posthw_11_25_20_O2,60,hw,2.587317,614,1,21,posthw,0
 B6,ab72_hw_channel4_Trial6_posthw_11_25_20_O2,90,hw,7.684209,566,4,21,posthw,0
 B6,ab84_hw_channel2_Trial6_posthw_11_25_20_O2,90,hw,7.765902,565,2,21,posthw,0
