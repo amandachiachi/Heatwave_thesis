@@ -18,7 +18,7 @@ A10,ab49_amb_channel10_Trial10_prehw_10_30_20_O2,60,amb,2.986392,605,10,17.5,pre
 A10,ab61_hw_channel5_Trial10_prehw_10_30_20_O2,90,hw,8.05887,558,5,17.5,prehw,0
 A10,ab62_amb_channel1_Trial10_prehw_10_30_20_O2,90,amb,8.299254,552,1,17.5,prehw,0
 A10,ab79_amb_channel3_Trial10_prehw_10_30_20_O2,90,amb,7.57059,563,3,17.5,prehw,0
-A10,blank_amb_channel6_Trial10_prehw_10_30_20_O2,,amb,,650,6,17.5,prehw,1
+A10,blank_hw_channel6_Trial10_prehw_10_30_20_O2,,hw,,650,6,17.5,prehw,1
 A11,ab1_hw_channel3_Trial11_prehw_10_30_20_O2,30,hw,0.346863,623,3,17.5,prehw,0
 A11,ab5_amb_channel4_Trial11_prehw_10_30_20_O2,30,amb,0.643587,625,4,17.5,prehw,0
 A11,ab25_amb_channel7_Trial11_prehw_10_30_20_O2,30,amb,0.516822,627,7,17.5,prehw,0
@@ -38,7 +38,7 @@ A3,ab60_hw_channel2_Trial3_prehw_10_29_20_O2,60,hw,2.154438,610,2,17.5,prehw,0
 A3,ab65_hw_channel4_Trial3_prehw_10_29_20_O2,90,hw,8.480481,544,4,17.5,prehw,0
 A3,ab73_amb_channel1_Trial3_prehw_10_29_20_O2,90,amb,7.910508,565,1,17.5,prehw,0
 A3,ab80_hw_channel5_Trial3_prehw_10_29_20_O2,90,hw,7.568712,569,5,17.5,prehw,0
-A3,blank_amb_channel6_Trial3_prehw_10_29_20_O2,,amb,,630,6,17.5,prehw,1
+A3,blank_hw_channel6_Trial3_prehw_10_29_20_O2,,hw,,630,6,17.5,prehw,1
 A4,ab16_hw_channel10_Trial4_prehw_10_29_20_O2,30,hw,0.691476,631,10,17.5,prehw,0
 A4,ab27_amb_channel1_Trial4_prehw_10_29_20_O2,30,amb,0.523395,631,1,17.5,prehw,0
 A4,ab29_amb_channel2_Trial4_prehw_10_29_20_O2,30,amb,0.464238,618,2,17.5,prehw,0
@@ -58,7 +58,7 @@ A5,ab54_hw_channel8_Trial5_prehw_10_29_20_O2,60,hw,2.839908,609,8,17.5,prehw,0
 A5,ab66_amb_channel6_Trial5_prehw_10_29_20_O2,90,amb,7.328328,577,6,17.5,prehw,0
 A5,ab74_amb_channel10_Trial5_prehw_10_29_20_O2,90,amb,7.952763,572,10,17.5,prehw,0
 A5,ab86_hw_channel4_Trial5_prehw_10_29_20_O2,90,hw,9.895554,517,4,17.5,prehw,0
-A5,blank_amb_channel2_Trial5_prehw_10_29_20_O2,,amb,,650,2,17.5,prehw,1
+A5,blank_hw_channel2_Trial5_prehw_10_29_20_O2,,hw,,650,2,17.5,prehw,1
 A6,ab10_hw_channel9_Trial6_prehw_10_30_20_O2,30,hw,0.708378,625,9,17.5,prehw,0
 A6,ab13_hw_channel3_Trial6_prehw_10_30_20_O2,30,hw,0.924348,615,3,17.5,prehw,0
 A6,ab30_amb_channel10_Trial6_prehw_10_30_20_O2,30,amb,0.53748,630,10,17.5,prehw,0
@@ -78,7 +78,7 @@ A7,ab56_amb_channel1_Trial7_prehw_10_30_20_O2,60,amb,2.91315,605,1,17.5,prehw,0
 A7,ab64_amb_channel2_Trial7_prehw_10_30_20_O2,90,amb,7.254147,558,2,17.5,prehw,0
 A7,ab82_hw_channel4_Trial7_prehw_10_30_20_O2,90,hw,7.426923,562,4,17.5,prehw,0
 A7,ab84_hw_channel9_Trial7_prehw_10_30_20_O2,90,hw,8.238219,553,9,17.5,prehw,0
-A7,blank_amb_channel8_Trial7_prehw_10_30_20_O2,,amb,,650,8,17.5,prehw,1
+A7,blank_hw_channel8_Trial7_prehw_10_30_20_O2,,hw,,650,8,17.5,prehw,1
 A8,ab15_hw_channel7_Trial8_prehw_10_30_20_O2,30,hw,0.859557,625,7,17.5,prehw,0
 A8,ab19_amb_channel1_Trial8_prehw_10_30_20_O2,30,amb,0.449214,625,1,17.5,prehw,0
 A8,ab24_hw_channel6_Trial8_prehw_10_30_20_O2,30,hw,0.843594,633,6,17.5,prehw,0
@@ -98,7 +98,7 @@ A9,ab55_hw_channel5_Trial9_prehw_10_30_20_O2,60,hw,2.683095,609,5,17.5,prehw,0
 A9,ab67_hw_channel1_Trial9_prehw_10_30_20_O2,90,hw,7.456032,566,1,17.5,prehw,0
 A9,ab70_hw_channel2_Trial9_prehw_10_30_20_O2,90,hw,7.979055,559,2,17.5,prehw,0
 A9,ab83_amb_channel9_Trial9_prehw_10_30_20_O2,90,amb,7.775292,566,9,17.5,prehw,0
-A9,blank_amb_channel10_Trial9_prehw_10_30_20_O2,,amb,,650,10,17.5,prehw,1
+A9,blank_hw_channel10_Trial9_prehw_10_30_20_O2,,hw,,650,10,17.5,prehw,1
 B1,ab1_hw_channel10_Trial1_posthw_11_24_20_O2,30,hw,0.401325,631,10,21,posthw,0
 B1,ab2_hw_channel3_Trial1_posthw_11_24_20_O2,30,hw,0.683964,633,3,21,posthw,0
 B1,ab23_hw_channel5_Trial1_posthw_11_24_20_O2,30,hw,0.475506,635,5,21,posthw,0

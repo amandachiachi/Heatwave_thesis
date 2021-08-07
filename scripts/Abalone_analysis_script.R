@@ -4,21 +4,57 @@
 
 
 # Load Libraries 
-library('tidyverse')
+
+install.packages("ggsci")
+
 library('here')
 library('stringr')
 library('performance')
 library('see')
+library('tidyverse')
+library('survival')
+library('survminer')
+library('ggsci')
+
 
 # Bring in data 
 # rates, mortality, CI, diet trial
 
+# clean up respiration data my removing those with faulty data
+# turn bad data into NA based on visual of oxygen update 
+Respo.R.clean<- read_csv(here("data","Abalone_Respo_Rates_nolog.csv"))
+view(Respo.R.clean)
+is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab19_amb_channel3_Trial8_posthw_11_25_20_O2"
+is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab26_amb_channel4_Trial8_posthw_11_25_20_O2"
+is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab31_amb_channel1_Trial8_posthw_11_25_20_O2"
+is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab34_amb_channel2_trial8_final_12_12_20_O2"
+is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab35_amb_channel4_trial8_final_12_12_20_O2"
+is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab35_amb_channel6_Trial4_posthw_11_24_20_O2"
+is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab56_amb_channel5_Trial8_posthw_11_25_20_O2"
+is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab59_amb_channel6_Trial8_posthw_11_25_20_O2"
+is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab63_amb_channel5_trial8_final_12_12_20_O2"
+is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab73_amb_channel8_trial8_final_12_12_20_O2"
+is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab81_amb_channel9_Trial8_posthw_11_25_20_O2"
+is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab83_amb_channel3_trial8_final_12_12_20_O2"
+is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab88_amb_channel2_Trial8_posthw_11_25_20_O2"
+is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "blank_hw_channel7_Trial5_posthw_11_25_20_O2"
+# c("each name")
+# not sure why 23 is missing a line, check back.
+
+Respo.R.clean<-Respo.R.clean%>%
+  drop_na(mmol.gram.hr)
+
+view(Respo.R.clean)
+
 # Respiration rates data file 
-resporates<- read_csv(here("data","Abalone_Respo_Rates_nolog.csv"))%>%
+resporates<- read_csv(here("data","Respo.R.clean.csv"))%>%
   select(abalone_number, size_class, treatment, period, mmol.gram.hr)%>%
   mutate(period = factor(period, levels = c("prehw", "posthw", "final")))%>%
   separate(abalone_number, into = "abalone_ID", sep = "_")%>%
   mutate(abalone_ID = as.numeric(str_extract_all(abalone_ID, "[0-9]+")))
+
+view(resporates)
+#ready to plot (below)
 
 # Body Condition Index data file
 sizedata<- read_csv(here("data", "condition_index.csv"))%>%
@@ -40,11 +76,6 @@ allrates<- resporates %>%
 allrates%>%
   ggplot(aes(x = shell_length))+
   geom_histogram()
-# outlier!!
-which(allrates$shell_length>600)
-allrates[101,]
-# abalone 46 
-# fixed! 
 
 #go back to group projects -- goes over how to look at 
 
@@ -53,10 +84,10 @@ allrates[101,]
 
 percentchange<- allrates%>%
   group_by(abalone_ID, treatment, size_class)%>%
-  summarise(weightpchange=100*(weight[period=="prehw"]-weight[period=="final"])/weight[period=="prehw"],
-            shellpchange=100*(shell_length[period=="prehw"]-shell_length[period=="final"])/shell_length[period=="prehw"], 
-            respopchange_hw=100*(mmol.gram.hr[period=="prehw"]-mmol.gram.hr[period=="posthw"])/mmol.gram.hr[period=="prehw"],
-            respopchange_final=100*(mmol.gram.hr[period=="prehw"]-mmol.gram.hr[period=="final"])/mmol.gram.hr[period=="prehw"]) 
+  summarise(weightpchange=100*(weight[period=="final"]-weight[period=="prehw"])/weight[period=="prehw"],
+            shellpchange=100*(shell_length[period=="final"]-shell_length[period=="prehw"])/shell_length[period=="prehw"], 
+            respopchange_hw=100*(mmol.gram.hr[period=="posthw"]-mmol.gram.hr[period=="prehw"])/mmol.gram.hr[period=="prehw"],
+            respopchange_final=100*(mmol.gram.hr[period=="final"]-mmol.gram.hr[period=="prehw"])/mmol.gram.hr[period=="prehw"]) 
 
 summarypchange<- percentchange%>%
   group_by(size_class, treatment)%>%
@@ -74,30 +105,92 @@ weightmodel<- lm(weightpchange ~size_class*treatment, data= percentchange)
 check_model(weightmodel)
 # checked the model and everything looks normal 
 anova(weightmodel)
+#tukey here
 # length model
 lengthmodel<- lm(shellpchange ~size_class*treatment, data = percentchange)
 check_model(lengthmodel)
 # checked the model and everything looks normal
 anova(lengthmodel)
+#tukey here (show table in supplement for results)
 
 ##### Plotting weight, length, and respiration at two time points ####
 # weight plot 
 weight_plot <- summarypchange%>%
   ggplot(aes(x = size_class, y = weight_avgpchange, color = treatment))+
   geom_point()+
-  geom_errorbar(aes(ymin = weight_avgpchange - weight_sepchange, ymax = weight_avgpchange + weight_sepchange), width = 0.2)
+  geom_errorbar(aes(ymin = weight_avgpchange - weight_sepchange, ymax = weight_avgpchange + weight_sepchange), width = 0.2)+
+  labs(x = "Size Class",
+       y = "Average change in weight (g)")+ # re-label y label 
+  theme_light()+ # remove the background color and make the plot look a bit simpler
+  theme(axis.title = element_text(size = 15))+
+  scale_color_aaas()
 
+weight_plot
 # length plot 
 length_plot <- summarypchange%>%
   ggplot(aes(x = size_class, y = shell_avgpchange, color = treatment))+
   geom_point()+
-  geom_errorbar(aes(ymin = shell_avgpchange - shell_sepchange, ymax = shell_avgpchange + shell_sepchange), width = 0.2)
-# check to see if this is correct
-# after this, if clean we can write it
+  geom_errorbar(aes(ymin = shell_avgpchange - shell_sepchange, ymax = shell_avgpchange + shell_sepchange), width = 0.2)+
+  labs(x = "Size Class",
+       y = "Average change in length (mm)")+ # re-label y label 
+  theme_light()+ # remove the background color and make the plot look a bit simpler
+  theme(axis.title = element_text(size = 15))+
+  scale_color_aaas()
+length_plot
+# check to see if this is correct - after this, if clean we can write it
 
+#### survivorship curve ####
+mortality_surv <- mortality%>%
+  mutate(status=case_when(
+    status==1~0, 
+    status==0~1))
 
-# re-do survivorship curve
+view(mortality)
+# treatment mortality 
+fit1 <- survfit(Surv(time, status) ~ treatment, data = mortality)
+ggsurv(fit1)
+ggsurvplot(fit1, data = mortality,
+           conf.int = TRUE,
+           pval = TRUE, 
+           fun = "pct", 
+           risk.table = FALSE, 
+           size = 1, 
+           linetype = "strata", 
+           palette = c("#2E9FDF", 
+                       "#E7B800"),
+           legend = "bottom", 
+           legend.title = "", 
+           legend.labs = c("ambient", "heatwave"))
 
+# size class mortality 
+fit2 <- survfit(Surv(time, status) ~ size_class, data = mortality)
+ggsurvplot(fit2, data = mortality,
+           conf.int = TRUE,
+           pval = TRUE, 
+           fun = "pct", 
+           risk.table = FALSE, 
+           size = 1, 
+           linetype = "strata", 
+           palette = c("#2E9FDF", 
+                       "#E7B800",
+                       "#990000"),
+           legend = "bottom", 
+           legend.title = "", 
+           legend.labs = c("30", "60", "90"))
+
+# Survivorship data analysis 
+# try the coxph()
+res.cox1 <- coxph(Surv(time, status) ~ treatment, data = mortality)
+res.cox1
+summary(res.cox1)
+
+res.cox2 <- coxph(Surv(time, status) ~ size_class, data = mortality)
+res.cox2
+summary(res.cox2)
+
+# multivariate cox regression alanysis 
+res.cox3 <- coxph(Surv(time, status) ~ treatment+size_class, data = mortality)
+summary(res.cox3)
 
 # calculate diet data normalized by weight 
 # similar to my code that Jenn helped me with
@@ -109,3 +202,8 @@ dietrates<-dietrates%>%
   left_join(weightsum) # creates a column with summed weights by tank 
 
 # data analysis 
+#### Respo code #### 
+
+# Nyssas code (add)
+
+# data analysis without NA data 
