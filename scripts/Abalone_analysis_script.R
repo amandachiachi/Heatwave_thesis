@@ -15,7 +15,7 @@ library('tidyverse')
 library('survival')
 library('survminer')
 library('ggsci')
-
+library('lubridate')
 
 # Bring in data 
 # rates, mortality, CI, diet trial
@@ -98,7 +98,9 @@ summarypchange<- percentchange%>%
             resp_hw_avgpchange=mean(respopchange_hw),
             resp_hw_sepchange=sd(respopchange_hw)/sqrt(n()), 
             resp_final_avgpchange=mean(respopchange_final),
-            resp_final_sepchange=sd(respopchange_final)/sqrt(n()))
+            resp_final_sepchange=sd(respopchange_final)/sqrt(n()))%>%
+  drop_na()
+view(summarypchange)
 #### Analysis for change in weight and change in shell length####
 # weight model
 weightmodel<- lm(weightpchange ~size_class*treatment, data= percentchange)
@@ -123,9 +125,10 @@ weight_plot <- summarypchange%>%
        y = "Average change in weight (g)")+ # re-label y label 
   theme_light()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 15))+
-  scale_color_aaas()
+  scale_color_manual(values = c("#AFEEEE", "#990000"))
 
 weight_plot
+
 # length plot 
 length_plot <- summarypchange%>%
   ggplot(aes(x = size_class, y = shell_avgpchange, color = treatment))+
@@ -135,18 +138,72 @@ length_plot <- summarypchange%>%
        y = "Average change in length (mm)")+ # re-label y label 
   theme_light()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 15))+
-  scale_color_aaas()
+  scale_color_manual(values = c("#AFEEEE", "#990000"))
 length_plot
 # check to see if this is correct - after this, if clean we can write it
 
 #### survivorship curve ####
-mortality_surv <- mortality%>%
+ mortality_surv <- mortality%>%
   mutate(status=case_when(
     status==1~0, 
     status==0~1))
 
-view(mortality)
-# treatment mortality 
+# treatment mortality with size class 30 
+mort_30<- mortality%>%
+  filter(size_class == "30")
+view(mort_30)
+fit1 <- survfit(Surv(time, status) ~ treatment, data = mort_30)
+ggsurv(fit1)
+ggsurvplot(fit1, data = mortality,
+           conf.int = TRUE,
+           pval = FALSE, 
+           fun = "pct", 
+           risk.table = FALSE, 
+           size = 1, 
+           linetype = "strata", 
+           palette = c("#AFEEEE", 
+                       "#990000"),
+           legend = "bottom", 
+           legend.title = "Survivorship Size Class 30mm", 
+           legend.labs = c("ambient", "heatwave"))
+
+# treatment mortality with size class 60 
+mort_60<- mortality%>%
+  filter(size_class == "60")
+fit1 <- survfit(Surv(time, status) ~ treatment, data = mort_60)
+ggsurv(fit1)
+ggsurvplot(fit1, data = mortality,
+           conf.int = TRUE,
+           pval = FALSE, 
+           fun = "pct", 
+           risk.table = FALSE, 
+           size = 1, 
+           linetype = "strata", 
+           palette = c("#AFEEEE", 
+                       "#990000"),
+           legend = "bottom", 
+           legend.title = "Survivorship Size Class 60mm", 
+           legend.labs = c("ambient", "heatwave"))
+
+# treatment mortality with size class 90
+mort_90<- mortality%>%
+  filter(size_class == "90")
+fit1 <- survfit(Surv(time, status) ~ treatment, data = mort_90)
+ggsurv(fit1)
+ggsurvplot(fit1, data = mortality,
+           conf.int = TRUE,
+           pval = FALSE, 
+           fun = "pct", 
+           risk.table = FALSE, 
+           size = 1, 
+           linetype = "strata", 
+           palette = c("#AFEEEE", 
+                       "#990000"),
+           legend = "bottom", 
+           legend.title = "Survivorship Size Class 90mm", 
+           legend.labs = c("ambient", "heatwave"))
+
+# treatment mortality with all sizes
 fit1 <- survfit(Surv(time, status) ~ treatment, data = mortality)
 ggsurv(fit1)
 ggsurvplot(fit1, data = mortality,
@@ -207,3 +264,19 @@ dietrates<-dietrates%>%
 # Nyssas code (add)
 
 # data analysis without NA data 
+
+# Cultured abalone pH - general plot
+pH_data <- read_csv(here("data", "Cultured_pH.csv"))
+
+pH_data$datetimes <- mdy_hm(pH_data$datetimes)
+
+pH_plot <- pH_data%>%
+  ggplot(aes(x = datetimes, y = pH))+
+  geom_line()+
+  labs(x = "Date and Time",
+       y = "pH")+ # re-label y label 
+  theme_light()+ # remove the background color and make the plot look a bit simpler
+  theme(axis.title = element_text(size = 15))
+
+pH_plot 
+
