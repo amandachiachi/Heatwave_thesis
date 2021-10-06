@@ -238,7 +238,7 @@ weightmodel<- lm(weightpchange ~size_class*treatment, data= percentchange)
 check_model(weightmodel)
 # checked the model and everything looks normal 
 anova(weightmodel)
-# tukey 
+#lsmeans(weightmodel, pairwise~size_class*treatment, adjust = "tukey")
 
 # Wength model
 lengthmodel<- lm(shellpchange ~size_class*treatment, data = percentchange)
@@ -260,15 +260,17 @@ weight_plot <- summarypchange%>%
   ggplot(aes(x = factor(size_class), y = weight_avgpchange, color = treatment))+
   geom_point()+
   geom_errorbar(aes(ymin = weight_avgpchange - weight_sepchange, ymax = weight_avgpchange + weight_sepchange), width = 0.1)+
+  geom_hline(yintercept=0, linetype='dashed', color='black', size=.5)+ 
+  annotate("text", x = .8, y = .8, label = "No Change", vjust = 2)+
   labs(x = "",
-       y = "Percent Change in Weight (g)")+ # re-label y label 
+       y = "Percent Change in Weight")+ # re-label y label 
   theme_light()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 13),
         axis.text = element_text(size = 12), 
         axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank())+
-  scale_color_manual(values = c("#a8a8a8", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
 weight_plot
 
@@ -277,6 +279,8 @@ length_plot <- summarypchange%>%
   ggplot(aes(x = factor(size_class), y = shell_avgpchange, color = treatment))+
   geom_point()+
   geom_errorbar(aes(ymin = shell_avgpchange - shell_sepchange, ymax = shell_avgpchange + shell_sepchange), width = 0.1)+
+  geom_hline(yintercept=0, linetype='dashed', color='black', size=.5)+ 
+  annotate("text", x = .8, y = .8, label = "No Change")+
   labs(x = "",
        y = "Percent Change in Length (mm)")+ # re-label y label 
   theme_light()+ # remove the background color and make the plot look a bit simpler
@@ -285,7 +289,7 @@ length_plot <- summarypchange%>%
         axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank())+
-  scale_color_manual(values = c("#a8a8a8", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
 length_plot
 
@@ -294,12 +298,14 @@ CI_plot <- summarypchange%>%
   ggplot(aes(x = factor(size_class), y = CI_avgpchange, color = treatment))+
   geom_point()+
   geom_errorbar(aes(ymin = CI_avgpchange - CI_sepchange, ymax = CI_avgpchange + CI_sepchange), width = 0.1)+
+  #geom_hline(yintercept=0, linetype='dashed', color='black', size=.5)+ 
+  #annotate("text", x = .8, y = .8, label = "No Change", vjust = 2.5)+
   xlab(bquote('Size Class'))+
   ylab(bquote('Percent Change in CI ('*'grams' ~mm^-3*')'))+
   theme_light()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 13),
         axis.text = element_text(size = 12))+
-  scale_color_manual(values = c("#a8a8a8", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
 CI_plot
 
@@ -313,7 +319,7 @@ Respo_plot_hw<- summarypchange%>%
   geom_point()+
   geom_errorbar(aes(ymin = resp_hw_avgpchange - resp_hw_sepchange, ymax = resp_hw_avgpchange + resp_hw_sepchange), width = 0.1)+
   xlab(bquote(''))+
-  ylab(bquote('Average Change in Respiration ('*'mmol' ~CO[2]~ gram^-1~hr^-1*')'))+
+  ylab(bquote('Average Change in Respiration ('*'mmol' ~O[2]~ gram^-1~hr^-1*')'))+
   ggtitle("Pre Heatwave to Heatwave Peak")+
   theme_light()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 10),
@@ -322,7 +328,7 @@ Respo_plot_hw<- summarypchange%>%
         axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank())+
-  scale_color_manual(values = c("#a8a8a8", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
 Respo_plot_hw
 
@@ -331,13 +337,13 @@ Respo_plot_final<- summarypchange%>%
   geom_point()+
   geom_errorbar(aes(ymin = resp_final_avgpchange - resp_final_sepchange, ymax = resp_final_avgpchange + resp_final_sepchange), width = 0.1)+
   xlab(bquote('Size Class'))+
-  ylab(bquote('Average Change in Respiration ('*'mmol' ~CO[2]~ gram^-1~hr^-1*')'))+
+  ylab(bquote('Average Change in Respiration ('*'mmol' ~O[2]~ gram^-1~hr^-1*')'))+
   ggtitle("Heatwave Peak to Post Heatwave")+
   theme_light()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 10),
         axis.text = element_text(size = 12), 
         plot.title=element_text(hjust = 0.5))+
-  scale_color_manual(values = c("#a8a8a8", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
 Respo_plot_final
 
@@ -369,7 +375,7 @@ Respo_pre_average<- resposummary%>%
   theme(axis.title = element_text(size = 10),
         axis.text = element_text(size = 12), 
         plot.title=element_text(hjust = 0.5))+
-  scale_color_manual(values = c("#a8a8a8", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.position = "none")
 Respo_pre_average
 
@@ -388,7 +394,7 @@ Respo_post_average<- resposummary%>%
         axis.title.y=element_blank(),
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank())+
-  scale_color_manual(values = c("#a8a8a8", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.position = "none")
 Respo_post_average
 
@@ -407,7 +413,7 @@ Respo_final_average<- resposummary%>%
         axis.title.y=element_blank(),
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank())+
-  scale_color_manual(values = c("#a8a8a8", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
 Respo_final_average
 
@@ -430,7 +436,7 @@ respo_plot_raw<- resporates%>%
         axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank())+
-  scale_color_manual(values = c("#a8a8a8", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
 respo_plot_raw
 
@@ -453,11 +459,11 @@ total_respo_dataset%>%
   theme(axis.title = element_text(size = 10),
         axis.text = element_text(size = 12), 
         plot.title=element_text(hjust = 0.5))+
-  scale_color_manual(values = c("#a8a8a8", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
 view(total_respo_dataset)
 
-# Respo code #### 
+# Log Respiration Code #### 
 
 plotlabels<-data.frame(y = c(0.25, -0.5), x = c(1,1), label = c("Respiration of Heatwave > Ambient", "Respiration of Heatwave < Ambient"))
 # 
