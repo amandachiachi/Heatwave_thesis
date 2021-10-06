@@ -282,7 +282,7 @@ length_plot <- summarypchange%>%
   geom_hline(yintercept=0, linetype='dashed', color='black', size=.5)+ 
   annotate("text", x = .8, y = .8, label = "No Change")+
   labs(x = "",
-       y = "Percent Change in Length (mm)")+ # re-label y label 
+       y = "Percent Change in Length")+ # re-label y label 
   theme_light()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 13),
         axis.text = element_text(size = 12), 
@@ -301,7 +301,7 @@ CI_plot <- summarypchange%>%
   #geom_hline(yintercept=0, linetype='dashed', color='black', size=.5)+ 
   #annotate("text", x = .8, y = .8, label = "No Change", vjust = 2.5)+
   xlab(bquote('Size Class'))+
-  ylab(bquote('Percent Change in CI ('*'grams' ~mm^-3*')'))+
+  ylab(bquote('Percent Change in CI'))+
   theme_light()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 13),
         axis.text = element_text(size = 12))+
