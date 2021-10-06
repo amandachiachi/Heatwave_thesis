@@ -16,6 +16,8 @@ library('ggplot2')
 library('reshape2')
 
 # Survivorship Plots ####
+# Mortality rates data file
+mortality<- read_csv(here("data", "mortality_raw.csv"))
 
 mortality_surv <- mortality%>%
   mutate(status=case_when(
@@ -42,8 +44,12 @@ p1<- ggsurvplot(fit1, data = mortality,
                 xlab = "",
                 ylab = "",
                 legend.labs = c("Ambient", "Heatwave"))
-p1plot <- p1$plot + labs(title = "A                                   30mm")
+p1plot <- p1$plot + 
+  labs(title = "A    30mm") + 
+  geom_vline(xintercept=0, linetype='dashed', color='blue', size=1)+ 
+  annotate("text", x = 0, y = 25, label = "Peak Heatwave", angle = 90, vjust = 1.5)
 
+p1plot
 # treatment mortality with size class 60 
 mort_60<- mortality%>%
   filter(size_class == "60")
@@ -62,7 +68,7 @@ p2<-ggsurvplot(fit1, data = mortality,
                legend.title = "", 
                xlab = "", 
                legend.labs = c("Ambient", "Heatwave"))
-p2plot <- p2$plot + labs(title = "B                                   60mm")
+p2plot <- p2$plot + labs(title = "B    60mm")+  geom_vline(xintercept=0, linetype='dashed', color='blue', size=1)
 
 # treatment mortality with size class 90
 mort_90<- mortality%>%
@@ -82,11 +88,11 @@ p3<-ggsurvplot(fit1, data = mortality,
                legend.title = "", 
                ylab = "",
                legend.labs = c("Ambient", "Heatwave"))
-p3plot <- p3$plot + labs(title = "C                                   90mm")
+p3plot <- p3$plot + labs(title = "C    90mm")+  geom_vline(xintercept=0, linetype='dashed', color='blue', size=1)
 
 # use patchwork to combine all mortality plots and make them pub quality 
 (p1plot/p2plot/p3plot)+ plot_layout( guides = 'collect') & theme(legend.position = "bottom")
-ggsave(filename = "output/survplot_all.png", width = 10, height = 10, dpi = 300)
+ggsave(filename = "output/survplot_all.png", width = 4, height = 10, dpi = 300)
 
 
 # treatment mortality with all sizes, not using this ?
@@ -135,7 +141,8 @@ res.cox3 <- coxph(Surv(time, status) ~ treatment+size_class, data = mortality)
 summary(res.cox3)
 res.cox3
 
-coxph(formula = Surv(time, status) ~treatment+size_class, data = mortality)
+res.cox4<-coxph(formula = Surv(time, status) ~treatment+size_class, data = mortality)
+
 
 # Respiration Data ####
 #Remove data with faulty data (turn into NA based on visual of oxygen) 
@@ -201,7 +208,7 @@ allrates%>%
 
 view(allrates)
 
-# Calculate percent change for weight, shell length, respiraton, and CI ####
+# Calculate percent change for weight, shell length, respiration, and CI ####
 
 percentchange<- allrates%>%
   group_by(abalone_ID, treatment, size_class)%>%
