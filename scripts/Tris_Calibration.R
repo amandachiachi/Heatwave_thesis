@@ -9,23 +9,22 @@ library(broom)
 ## bring in pH calibration files and raw data files
 pHcalib<-read_csv('data/Tris_Calibration.csv')
 pHData<-read_csv('data/Chiachi_Meso_mV.csv')
-
+view(pHData)
 ## take the mV calibration files by each date and use them to calculate pH
-pHSlope<-pHcalib %>%
+pHSlope<-pHcalib%>%
   nest_by(date)%>%
-  mutate(fitpH = list(lm(mVTris~TTris, data = data))) %>% # linear regression of mV and temp of the tris
-  summarise(broom::tidy(fitpH)) %>% # make the output tidy
-  select(date, term, estimate) %>%
-  pivot_wider(names_from = term, values_from = estimate) %>%# put slope and intercept in their own column
-  left_join(.,pHData) %>% # join with the pH sample data
-  mutate(mVTris = TempInSitu*TTris + `(Intercept)`) %>%# calculate the mV of the tris at temperature in which the pH of samples were measured
-  drop_na() %>%
+  mutate(fitpH = list(lm(mVTris~TTris, data = data)))%>%  # linear regression of mV and temp of the tris
+  summarise(broom::tidy(fitpH))%>% # make the output tidy
+  select(date, term, estimate)%>%
+  pivot_wider(names_from = term, values_from = estimate)%>%# put slope and intercept in their own column
+  left_join(.,pHData)%>%  # join with the pH sample data
+  mutate(mVTris = TempInSitu*TTris + `(Intercept)`)%>%# calculate the mV of the tris at temperature in which the pH of samples were measured
+  drop_na()%>%
   mutate(pH = pH(Ex=mV,Etris=mVTris,S=Salinity_lab,T=TempInSitu)) %>% # calculate pH of the samples using the pH seacarb function
   #mutate(pH_insitu = pHinsi(pH = pH, ALK = TA_Raw, Tinsi = TempInSitu, Tlab = Temp, S = Salinity_lab_Silbiger)) %>%
-  select(date, SampleID,Salinity_lab, TempInSitu) ## need to calculate pH insi then it is done
+  select(date, SampleID,Salinity_lab,pH, TempInSitu, treatment) ## need to calculate pH insi then it is done
 
 View(pHSlope)
-
-
 ## write the data
-write_csv(pHSlope, paste0('Probe_and_Logger_Protocols/Orion_Multiparameter_Sensor/Data/Chiachi_Meso_pH.csv'))
+write_csv(pHSlope, paste0('data/Chiachi_Meso_ph.csv'))
+

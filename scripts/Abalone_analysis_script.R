@@ -184,6 +184,17 @@ mortality<- read_csv(here("data", "mortality_raw.csv"))
 # Diet trial rates data file 
 dietrates<- read_csv(here("data", "diet_raw.csv")) # add the factor as listed above when changed 
 
+###stats with scott
+
+library(stargazer)
+data(mtcars)
+resporates_df <- as.data.frame(resporates)
+stargazer(resporates_df, type = "text")
+
+reg1 <- lm(shell_length ~ weight, data = sizedata)
+reg2 <- lm(shell_length ~ weight + log(CI), data = sizedata)
+
+stargazer(reg1, reg2, type = "text")
 # Bring Data sets together ######
 
 #join respo data sheet with the size data to make it one called allrates
