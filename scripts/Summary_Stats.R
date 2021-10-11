@@ -37,8 +37,9 @@ SummaryStats[8,2] <- hobo_temps_means_hw$TempInSitu_mean[2]
 SummaryStats[7,3] <- hobo_temps_means_post$TempInSitu_mean[1]
 SummaryStats[8,3] <- hobo_temps_means_post$TempInSitu_mean[2]
 
-# I do not know how to save this table
-save(SummaryStats, file = "data/SummaryStats.csv")
+# Save as CSV (both data and output)
+write.csv(SummaryStats, "output/SummaryStats.csv", row.names = TRUE)
+
 
 
 
