@@ -350,8 +350,8 @@ ggsave(filename = "output/change_respiration.png", width = 5, height = 8, dpi = 
 #Average respiration rate (not percent change)
 #cant figure this out
 view(resporates)
-resporates$size_class<-as.factor(resporates$size_class)
-resposummary<-resporates%>%
+#resporates$size_class<-as.factor(resporates$size_class)
+#resposummary<-resporates%>%
   group_by(period, treatment)%>%
   pivot_wider(names_from = size_class, values_from = mmol.gram.hr)%>%
   summarise(resp_30=mean(resposummary$`30`, na.rm = TRUE))
@@ -468,7 +468,7 @@ total_respo_dataset%>%
   xlab(bquote('Size Class'))+
   ylab(bquote('Average Change in Respiration ('*'mmol' ~CO[2]~ gram^-1~hr^-1*')'))+
   ggtitle("Heatwave Peak to Post Heatwave")+
-  theme_light()+ # remove the background color and make the plot look a bit simpler
+  theme_pubr()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 10),
         axis.text = element_text(size = 12), 
         plot.title=element_text(hjust = 0.5))+
@@ -477,12 +477,12 @@ total_respo_dataset%>%
 view(total_respo_dataset)
 
 # Log Respiration Code #### 
-
-plotlabels<-data.frame(y = c(0.25, -0.5), x = c(1,1), label = c("Respiration of Heatwave > Ambient", "Respiration of Heatwave < Ambient"))
+# Size class showing on plot, faceted by timepoint
+plotlabels<-data.frame(y = c(0.25, -0.5), x = c(1,1), label = c("Heatwave > Ambient", "Heatwave < Ambient"))
 # 
 respo_plot_data<-resporates %>%
   mutate(phase = as.factor(ifelse(treatment=="amb", "base","treat")))%>% # needed for LRR function base is control
-  group_split(size_class, period)%>% 
+  group_split(size_class, period)%>%
   purrr::map_dfr(
     function(x){
       LRR_test<-logRespRatio(x$mmol.gram.hr, phase = x$phase, base_level = "base")
@@ -491,22 +491,25 @@ respo_plot_data<-resporates %>%
       CI.UL <- LRR_test$CI[2] # upper CI
       period<- x$period[1] # time period
       size_class<-as.factor(x$size_class[1]) # size class
-      data.frame(period, size_class, LNRR,CI.LL, CI.UL) # make a dataframe of everything
+      data.frame(size_class, period, LNRR,CI.LL, CI.UL) # make a dataframe of everything
     }
   )
 respo_plot_data%>%
   ggplot(aes(x = size_class, y = LNRR))+
+  facet_wrap(~period)+
   geom_bar(stat = "identity", position = position_dodge(0.9))+
   geom_errorbar(width = 0.1, aes(ymin = CI.LL, ymax = CI.UL),position = position_dodge(0.9)) +
   geom_hline(yintercept = 0, lty = 2)+
-  theme_bw()+
+  theme_pubr()+ # remove the background color and make the plot look a bit simpler
+  theme(axis.title = element_text(size = 16),
+        axis.text = element_text(size = 12))+
+  theme(legend.title = element_blank())+
   scale_fill_viridis_d()+
   labs(x = "Size Class",
-       y = "Log ratio (heatwave/control)"
+       y = "Respiration Log ratio (heatwave/control)"
   )+
   geom_label(data = plotlabels, aes(x=x, y=y, label = label), show.legend = FALSE)
-ggsave(filename = "output/respo_log.png", width = 10, height = 10, dpi = 300)
-
+ggsave(filename = "output/respo_log.png", width = 14, height = 6, dpi = 300)
 
 # data analysis without NA Respiration Data
 # Ambient to Heatwave Change in Respiration Analysis 
@@ -527,23 +530,32 @@ check_model(respo_model)
 anova(respo_model)
 # Cultured abalone pH - general plot #####
 pH_data <- read_csv(here("data", "Cultured_pH.csv"))
-
+view(pH_data)
 pH_data$datetimes <- mdy_hm(pH_data$datetimes)
+pH_data$datetimes <- as.POSIXct(pH_data$datetimes)
 
-# filter(pH_data, between(datetimes, as.Date("2020-01-01 12:00:00"), as.Date("2020-05-01 12:00:00"))) 
+tail(pH_data)
+start_cultpH<-as.POSIXct("2021-01-06 12:00:00")
+end_cultpH<-as.POSIXct("2021-04-30 12:00:00")
+pH_data_clean<- pH_data%>%
+  filter(between(datetimes, start_cultpH, end_cultpH))
 
-pH_plot <- pH_data%>%
+pH_plot <- pH_data_clean%>%
   ggplot(aes(x = datetimes, y = pH))+
   geom_line()+
-  labs(x = "Date and Time",
+  labs(x = "",
        y = "pH")+ # re-label y label 
-  theme_light()+ # remove the background color and make the plot look a bit simpler
-  theme(axis.title = element_text(size = 15))
+  theme_pubr()+ # remove the background color and make the plot look a bit simpler
+  theme(axis.title = element_text(size = 15),
+        axis.text = element_text(size = 12), 
+        plot.title=element_text(hjust = 0.5))
 
 pH_plot 
 
-# Consumption Rate Plot and Analysis ####
+ggsave(filename = "output/Cultured_pH.png", width = 10, height = 5, dpi = 300)
 
+
+# Consumption Rate Plot and Analysis ####
 # Diet Data and Plots ####
 # calculate diet data normalized by weight 
 # similar to my code that Jenn helped me with
