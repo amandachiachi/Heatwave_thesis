@@ -148,7 +148,7 @@ res.cox4<-coxph(formula = Surv(time, status) ~treatment+size_class, data = morta
 #Remove data with faulty data (turn into NA based on visual of oxygen) 
 
 Respo.R.clean<- read_csv(here("data","Abalone_Respo_Rates_nolog.csv"))
-view(Respo.R.clean)
+#view(Respo.R.clean)
 is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab19_amb_channel3_Trial8_posthw_11_25_20_O2"
 is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab26_amb_channel4_Trial8_posthw_11_25_20_O2"
 is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab31_amb_channel1_Trial8_posthw_11_25_20_O2"
@@ -166,7 +166,7 @@ is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "blank_hw_c
 
 Respo.R.clean<-Respo.R.clean%>%
   drop_na(mmol.gram.hr)
-view(Respo.R.clean)
+#view(Respo.R.clean)
 
 # Clean respiration rates data file
 resporates<- Respo.R.clean%>%
@@ -174,7 +174,7 @@ resporates<- Respo.R.clean%>%
   mutate(period = factor(period, levels = c("prehw", "posthw", "final")))%>%
   separate(abalone_number, into = "abalone_ID", sep = "_")%>%
   mutate(abalone_ID = as.numeric(str_extract_all(abalone_ID, "[0-9]+")))
-view(resporates)
+#view(resporates)
 
 # Size, Mortality and Diet data ####
 sizedata<- read_csv(here("data", "condition_index.csv"))%>%
@@ -184,26 +184,12 @@ mortality<- read_csv(here("data", "mortality_raw.csv"))
 # Diet trial rates data file 
 dietrates<- read_csv(here("data", "diet_raw.csv")) # add the factor as listed above when changed 
 
-###stats with scott
-
-library(stargazer)
-data(mtcars)
-resporates_df <- as.data.frame(resporates)
-stargazer(resporates_df, type = "text")
-
-reg1 <- lm(shell_length ~ weight, data = sizedata)
-reg2 <- lm(shell_length ~ weight + log(CI), data = sizedata)
-
-stargazer(reg1, reg2, type = "text")
 # Bring Data sets together ######
-
 #join respo data sheet with the size data to make it one called allrates
 allrates<- resporates %>%
   left_join(sizedata)
 
-
 # Data exploration (length, respiration and weight) ####
-
 # Check histogram with shell length, respiration rates and weight 
 allrates%>%
   ggplot(aes(x = shell_length))+
@@ -217,7 +203,7 @@ allrates%>%
   ggplot(aes(x = weight))+
   geom_histogram()
 
-view(allrates)
+#view(allrates)
 
 # Calculate percent change for weight, shell length, respiration, and CI ####
 
@@ -242,7 +228,7 @@ summarypchange<- percentchange%>%
             CI_avgpchange=mean(CIpchange), 
             CI_sepchange=sd(CIpchange)/sqrt(n()))%>%
   drop_na()
-view(summarypchange)
+#view(summarypchange)
 # Analysis for change in weight and change in shell length ####
 # Weight model
 weightmodel<- lm(weightpchange ~size_class*treatment, data= percentchange)
@@ -362,6 +348,21 @@ Respo_plot_hw/Respo_plot_final+ plot_layout( guides = 'collect')& theme(legend.p
 ggsave(filename = "output/change_respiration.png", width = 5, height = 8, dpi = 300)
 
 #Average respiration rate (not percent change)
+#cant figure this out
+view(resporates)
+resporates$size_class<-as.factor(resporates$size_class)
+resposummary<-resporates%>%
+  group_by(period, treatment)%>%
+  pivot_wider(names_from = size_class, values_from = mmol.gram.hr)%>%
+  summarise(resp_30=mean(resposummary$`30`, na.rm = TRUE))
+  summarise(resp_30=mean(resposummary$`30`, na.rm = FALSE), 
+            resp_30_se=sd(resposummary$`30`, na.rm = TRUE)/sqrt(n()), 
+            resp_60=mean(resposummary$`60`, na.rm = FALSE), 
+            resp_60_se=sd(resposummary$`60`, na.rm = TRUE)/sqrt(n()), 
+            resp_90=mean(resposummary$`90`, na.rm = FALSE), 
+            resp_90_se=sd(resposummary$`90`, na.rm = TRUE)/sqrt(n()))
+view(resposummary)
+
 resposummary<- resporates%>%
   group_by(size_class, treatment)%>%
   pivot_wider(names_from = period, values_from = mmol.gram.hr)%>%
@@ -374,6 +375,7 @@ resposummary<- resporates%>%
 view(resposummary)
 
 # Averaged Respiration Rate Plot
+
 Respo_pre_average<- resposummary%>%
   ggplot(aes(x = factor(size_class), y = resp_pre, color = treatment))+
   geom_point()+
@@ -694,3 +696,12 @@ consumption_resp_plot_all <- Resp_diet_avg_clean%>%
 consumption_resp_plot_all
 ggsave(filename = "output/consumption_resp_plot_all.png", width = 8, height = 5, dpi = 300)
 
+library(stargazer)
+data(mtcars)
+resporates_df <- as.data.frame(resporates)
+stargazer(resporates_df, type = "text")
+
+reg1 <- lm(shell_length ~ weight, data = sizedata)
+reg2 <- lm(shell_length ~ weight + log(CI), data = sizedata)
+
+stargazer(reg1, reg2, type = "text")
