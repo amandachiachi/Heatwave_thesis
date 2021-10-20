@@ -37,8 +37,8 @@ p1<- ggsurvplot(fit1, data = mortality,
                 risk.table = FALSE, 
                 size = 1, 
                 linetype = "strata", 
-                palette = c("#a8a8a8", 
-                            "#661100"),
+                palette = c("#523C92", 
+                            "#ff9d03"),
                 legend = "bottom", 
                 legend.title = "",
                 xlab = "",
@@ -46,7 +46,7 @@ p1<- ggsurvplot(fit1, data = mortality,
                 legend.labs = c("Ambient", "Heatwave"))
 p1plot <- p1$plot + 
   labs(title = "A    30mm") + 
-  geom_vline(xintercept=0, linetype='dashed', color='blue', size=1)+ 
+  geom_vline(xintercept=0, linetype='dashed', color='black', size=.5)+ 
   annotate("text", x = 0, y = 25, label = "Peak Heatwave", angle = 90, vjust = 1.5)
 
 p1plot
@@ -62,13 +62,13 @@ p2<-ggsurvplot(fit1, data = mortality,
                risk.table = FALSE, 
                size = 1, 
                linetype = "strata", 
-               palette = c("#a8a8a8", 
-                           "#661100"),
+               palette = c("#523C92", 
+                           "#ff9d03"),
                legend = "bottom", 
                legend.title = "", 
                xlab = "", 
                legend.labs = c("Ambient", "Heatwave"))
-p2plot <- p2$plot + labs(title = "B    60mm")+  geom_vline(xintercept=0, linetype='dashed', color='blue', size=1)
+p2plot <- p2$plot + labs(title = "B    60mm")+  geom_vline(xintercept=0, linetype='dashed', color='black', size=.5)
 
 # treatment mortality with size class 90
 mort_90<- mortality%>%
@@ -82,13 +82,13 @@ p3<-ggsurvplot(fit1, data = mortality,
                risk.table = FALSE, 
                size = 1, 
                linetype = "strata", 
-               palette = c("#a8a8a8", 
-                           "#661100"),
+               palette = c("#523C92", 
+                           "#ff9d03"),
                legend = "bottom", 
                legend.title = "", 
                ylab = "",
                legend.labs = c("Ambient", "Heatwave"))
-p3plot <- p3$plot + labs(title = "C    90mm")+  geom_vline(xintercept=0, linetype='dashed', color='blue', size=1)
+p3plot <- p3$plot + labs(title = "C    90mm")+  geom_vline(xintercept=0, linetype='dashed', color='black', size=.5)
 
 # use patchwork to combine all mortality plots and make them pub quality 
 (p1plot/p2plot/p3plot)+ plot_layout( guides = 'collect') & theme(legend.position = "bottom")
@@ -105,8 +105,8 @@ ggsurvplot(fit1, data = mortality,
            risk.table = FALSE, 
            size = 1, 
            linetype = "strata", 
-           palette = c("#2E9FDF", 
-                       "#E7B800"),
+           palette = c("#741b47", 
+                       "#e69138"),
            legend = "bottom", 
            legend.title = "", 
            legend.labs = c("ambient", "heatwave"))
@@ -122,7 +122,7 @@ ggsurvplot(fit2, data = mortality,
            linetype = "strata", 
            palette = c("#2E9FDF", 
                        "#E7B800",
-                       "#990000"),
+                       "#e69138"),
            legend = "bottom", 
            legend.title = "", 
            legend.labs = c("30", "60", "90"))
@@ -170,11 +170,11 @@ Respo.R.clean<-Respo.R.clean%>%
 
 # Clean respiration rates data file
 resporates<- Respo.R.clean%>%
-  select(abalone_number, size_class, treatment, period, mmol.gram.hr)%>%
+  select(abalone_number, size_class, treatment, period, mmol.gram.hr, tank_ID)%>%
   mutate(period = factor(period, levels = c("prehw", "posthw", "final")))%>%
   separate(abalone_number, into = "abalone_ID", sep = "_")%>%
   mutate(abalone_ID = as.numeric(str_extract_all(abalone_ID, "[0-9]+")))
-#view(resporates)
+view(resporates)
 
 # Size, Mortality and Diet data ####
 sizedata<- read_csv(here("data", "condition_index.csv"))%>%
@@ -192,7 +192,7 @@ allrates<- resporates %>%
 # Data exploration (length, respiration and weight) ####
 # Check histogram with shell length, respiration rates and weight 
 allrates%>%
-  ggplot(aes(x = shell_length))+
+  ggplot(aes(x = shell_length_cm))+
   geom_histogram()
 
 allrates%>%
@@ -206,11 +206,11 @@ allrates%>%
 #view(allrates)
 
 # Calculate percent change for weight, shell length, respiration, and CI ####
-
+view(allrates)
 percentchange<- allrates%>%
   group_by(abalone_ID, treatment, size_class)%>%
   summarise(weightpchange=100*(weight[period=="final"]-weight[period=="prehw"])/weight[period=="prehw"],
-            shellpchange=100*(shell_length[period=="final"]-shell_length[period=="prehw"])/shell_length[period=="prehw"], 
+            shellpchange=100*(shell_length_cm[period=="final"]-shell_length_cm[period=="prehw"])/shell_length_cm[period=="prehw"], 
             respopchange_hw=100*(mmol.gram.hr[period=="posthw"]-mmol.gram.hr[period=="prehw"])/mmol.gram.hr[period=="prehw"],
             respopchange_final=100*(mmol.gram.hr[period=="final"]-mmol.gram.hr[period=="prehw"])/mmol.gram.hr[period=="prehw"], 
             CIpchange=100*CI[period=="final"]-CI[period=="prehw"]/CI[period=="prehw"])
@@ -253,12 +253,13 @@ anova(CImodel)
 
 # Plot weight, length, CI and respiration at two time points ####
 #Weight plot 
+#should this be AFDW???
 weight_plot <- summarypchange%>%
   ggplot(aes(x = factor(size_class), y = weight_avgpchange, color = treatment))+
   geom_point()+
   geom_errorbar(aes(ymin = weight_avgpchange - weight_sepchange, ymax = weight_avgpchange + weight_sepchange), width = 0.1)+
   geom_hline(yintercept=0, linetype='dashed', color='black', size=.5)+ 
-  annotate("text", x = .8, y = .8, label = "No Change", vjust = 2)+
+  annotate("text", x = .8, y = .8, label = "", vjust = 2)+
   labs(x = "",
        y = "Percent Change in Weight")+ # re-label y label 
   theme_light()+ # remove the background color and make the plot look a bit simpler
@@ -267,7 +268,8 @@ weight_plot <- summarypchange%>%
         axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank())+
-  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#523C92", 
+                                "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
 weight_plot
 
@@ -277,7 +279,7 @@ length_plot <- summarypchange%>%
   geom_point()+
   geom_errorbar(aes(ymin = shell_avgpchange - shell_sepchange, ymax = shell_avgpchange + shell_sepchange), width = 0.1)+
   geom_hline(yintercept=0, linetype='dashed', color='black', size=.5)+ 
-  annotate("text", x = .8, y = .8, label = "No Change")+
+  annotate("text", x = .8, y = .8, label = "")+
   labs(x = "",
        y = "Percent Change in Length")+ # re-label y label 
   theme_light()+ # remove the background color and make the plot look a bit simpler
@@ -286,7 +288,8 @@ length_plot <- summarypchange%>%
         axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank())+
-  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#523C92", 
+                                "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
 length_plot
 
@@ -296,13 +299,14 @@ CI_plot <- summarypchange%>%
   geom_point()+
   geom_errorbar(aes(ymin = CI_avgpchange - CI_sepchange, ymax = CI_avgpchange + CI_sepchange), width = 0.1)+
   #geom_hline(yintercept=0, linetype='dashed', color='black', size=.5)+ 
-  #annotate("text", x = .8, y = .8, label = "No Change", vjust = 2.5)+
+  #annotate("text", x = .8, y = .8, vjust = 2.5)+
   xlab(bquote('Size Class'))+
   ylab(bquote('Percent Change in CI'))+
   theme_light()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 13),
         axis.text = element_text(size = 12))+
-  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#523C92", 
+                                "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
 CI_plot
 
@@ -325,7 +329,8 @@ Respo_plot_hw<- summarypchange%>%
         axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank())+
-  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#523C92", 
+                                "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
 Respo_plot_hw
 
@@ -340,7 +345,8 @@ Respo_plot_final<- summarypchange%>%
   theme(axis.title = element_text(size = 10),
         axis.text = element_text(size = 12), 
         plot.title=element_text(hjust = 0.5))+
-  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#523C92", 
+                                "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
 Respo_plot_final
 
@@ -348,20 +354,6 @@ Respo_plot_hw/Respo_plot_final+ plot_layout( guides = 'collect')& theme(legend.p
 ggsave(filename = "output/change_respiration.png", width = 5, height = 8, dpi = 300)
 
 #Average respiration rate (not percent change)
-#cant figure this out
-view(resporates)
-#resporates$size_class<-as.factor(resporates$size_class)
-#resposummary<-resporates%>%
-  group_by(period, treatment)%>%
-  pivot_wider(names_from = size_class, values_from = mmol.gram.hr)%>%
-  summarise(resp_30=mean(resposummary$`30`, na.rm = TRUE))
-  summarise(resp_30=mean(resposummary$`30`, na.rm = FALSE), 
-            resp_30_se=sd(resposummary$`30`, na.rm = TRUE)/sqrt(n()), 
-            resp_60=mean(resposummary$`60`, na.rm = FALSE), 
-            resp_60_se=sd(resposummary$`60`, na.rm = TRUE)/sqrt(n()), 
-            resp_90=mean(resposummary$`90`, na.rm = FALSE), 
-            resp_90_se=sd(resposummary$`90`, na.rm = TRUE)/sqrt(n()))
-view(resposummary)
 
 resposummary<- resporates%>%
   group_by(size_class, treatment)%>%
@@ -374,32 +366,50 @@ resposummary<- resporates%>%
             resp_final_se=sd(final, na.rm = TRUE)/sqrt(n()))
 view(resposummary)
 
+# Plot Average Respiration Rate & SE faceted by size class 
+
+resporates$size_name<-with(resporates, factor(size_class, levels = c(30,60,90), 
+                                              labels = c("Thirty", "Sixty", "Ninety")))
+
+view(resporates)
+resposummary1<- resporates%>%
+  group_by(period, treatment)%>%
+  pivot_wider(names_from = size_name, values_from = mmol.gram.hr)%>%
+  summarise(resp_30=mean(Thirty, na.rm = TRUE), 
+            resp_30_se=sd(Thirty, na.rm = TRUE/sqrt(n())), 
+            resp_60=mean(Sixty, na.rm = TRUE), 
+            resp_60_se=sd(Sixty, na.rm = TRUE)/sqrt(n()), 
+            resp_90=mean(Ninety, na.rm = TRUE), 
+            resp_90_se=sd(Ninety, na.rm = TRUE)/sqrt(n()))
+view(resposummary1)
+
 # Averaged Respiration Rate Plot
 
-Respo_pre_average<- resposummary%>%
-  ggplot(aes(x = factor(size_class), y = resp_pre, color = treatment))+
+Respo_30_average<- resposummary1%>%
+  ggplot(aes(x = factor(period), y = resp_30, color = treatment))+
   geom_point()+
   ylim(5, 40)+
-  geom_errorbar(aes(ymin = resp_pre - resp_pre_se, ymax = resp_pre + resp_pre_se), width = 0.1)+
+  geom_errorbar(aes(ymin = resp_30 - resp_30_se, ymax = resp_30 + resp_30_se), width = 0.1)+
   xlab(bquote(''))+
   ylab(bquote('Average Respiration Rate ('*'mmol' ~O[2]~ gram^-1~hr^-1*')'))+
-  ggtitle("Pre Heatwave")+
+  ggtitle("30")+
   theme_light()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 10),
         axis.text = element_text(size = 12), 
         plot.title=element_text(hjust = 0.5))+
-  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#523C92", 
+                                "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.position = "none")
-Respo_pre_average
+Respo_30_average
 
-Respo_post_average<- resposummary%>%
-  ggplot(aes(x = factor(size_class), y = resp_post, color = treatment))+
+Respo_60_average<- resposummary1%>%
+  ggplot(aes(x = factor(period), y = resp_60, color = treatment))+
   geom_point()+
   ylim(5, 40)+
-  geom_errorbar(aes(ymin = resp_post - resp_post_se, ymax = resp_post + resp_post_se), width = 0.1)+
+  geom_errorbar(aes(ymin = resp_60 - resp_60_se, ymax = resp_60 + resp_60_se), width = 0.1)+
   xlab(bquote(''))+
   ylab(bquote('Average Respiration Rate ('*'mmol' ~O[2]~ gram^-1~hr^-1*')'))+
-  ggtitle("Post Heatwave")+
+  ggtitle("60")+
   theme_light()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 10),
         axis.text = element_text(size = 12), 
@@ -407,18 +417,19 @@ Respo_post_average<- resposummary%>%
         axis.title.y=element_blank(),
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank())+
-  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#523C92", 
+                                "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.position = "none")
-Respo_post_average
+Respo_60_average
 
-Respo_final_average<- resposummary%>%
-  ggplot(aes(x = factor(size_class), y = resp_final, color = treatment))+
+Respo_90_average<- resposummary1%>%
+  ggplot(aes(x = factor(period), y = resp_90, color = treatment))+
   geom_point()+
   ylim(5, 40)+
-  geom_errorbar(aes(ymin = resp_final - resp_final_se, ymax = resp_final + resp_final_se), width = 0.1)+
+  geom_errorbar(aes(ymin = resp_90 - resp_90_se, ymax = resp_90 + resp_90_se), width = 0.1)+
   xlab(bquote(''))+
   ylab(bquote('Average Respiration Rate ('*'mmol' ~O[2]~ gram^-1~hr^-1*')'))+
-  ggtitle("Final")+
+  ggtitle("90")+
   theme_light()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 10),
         axis.text = element_text(size = 12), 
@@ -426,11 +437,12 @@ Respo_final_average<- resposummary%>%
         axis.title.y=element_blank(),
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank())+
-  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#523C92", 
+                                "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
-Respo_final_average
+Respo_90_average
 
-Respo_pre_average|Respo_post_average|Respo_final_average + plot_layout( guides = 'collect')& theme(legend.position = "bottom")
+Respo_30_average|Respo_60_average|Respo_90_average + plot_layout( guides = 'collect')& theme(legend.position = "bottom")
 ggsave(filename = "output/respo_plot_average.png", width = 10, height = 5, dpi = 300)
 
 #Raw respiration rate plot faceted by period 
@@ -440,7 +452,7 @@ respo_plot_raw<- resporates%>%
   geom_point()+
   facet_wrap(~period)+
   xlab(bquote(''))+
-  ylab(bquote('Respiration Rates('*'mmol' ~CO[2]~ gram^-1~hr^-1*')'))+
+  ylab(bquote('Respiration Rates('*'mmol' ~O[2]~ gram^-1~hr^-1*')'))+
   ggtitle("Pre Heatwave to Heatwave Peak")+
   theme_light()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 10),
@@ -449,7 +461,8 @@ respo_plot_raw<- resporates%>%
         axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank())+
-  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#523C92", 
+                                "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
 respo_plot_raw
 
@@ -466,13 +479,14 @@ total_respo_dataset%>%
   geom_point()+
   geom_errorbar(aes(ymin = Resp_Val - SE_Val, ymax = Resp_Val + SE_Val), width = 0.1)+
   xlab(bquote('Size Class'))+
-  ylab(bquote('Average Change in Respiration ('*'mmol' ~CO[2]~ gram^-1~hr^-1*')'))+
+  ylab(bquote('Average Change in Respiration ('*'mmol' ~O[2]~ gram^-1~hr^-1*')'))+
   ggtitle("Heatwave Peak to Post Heatwave")+
   theme_pubr()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 10),
         axis.text = element_text(size = 12), 
         plot.title=element_text(hjust = 0.5))+
-  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#523C92", 
+                                "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
 view(total_respo_dataset)
 
@@ -495,8 +509,8 @@ respo_plot_data<-resporates %>%
     }
   )
 respo_plot_data%>%
-  ggplot(aes(x = size_class, y = LNRR))+
-  facet_wrap(~period)+
+  ggplot(aes(x = period, y = LNRR))+
+  facet_wrap(~size_class)+
   geom_bar(stat = "identity", position = position_dodge(0.9))+
   geom_errorbar(width = 0.1, aes(ymin = CI.LL, ymax = CI.UL),position = position_dodge(0.9)) +
   geom_hline(yintercept = 0, lty = 2)+
@@ -508,6 +522,8 @@ respo_plot_data%>%
   labs(x = "Size Class",
        y = "Respiration Log ratio (heatwave/control)"
   )+
+  scale_x_discrete(labels=c("prehw" = "Pre", "posthw" = "HW",
+                            "final" = "Final"))+
   geom_label(data = plotlabels, aes(x=x, y=y, label = label), show.legend = FALSE)
 ggsave(filename = "output/respo_log.png", width = 14, height = 6, dpi = 300)
 
@@ -528,6 +544,7 @@ view(resporates)
 respo_model<-lm(mmol.gram.hr~size_class*treatment*period, data = resporates)
 check_model(respo_model)
 anova(respo_model)
+
 # Cultured abalone pH - general plot #####
 pH_data <- read_csv(here("data", "Cultured_pH.csv"))
 view(pH_data)
@@ -554,6 +571,31 @@ pH_plot
 
 ggsave(filename = "output/Cultured_pH.png", width = 10, height = 5, dpi = 300)
 
+# Cultured abalone temp 
+temp_data <- read_csv(here("data", "A1_Cult-SN20565264.csv"))
+view(temp_data)
+temp_data$datetime <- mdy_hm(temp_data$datetime)
+temp_data$datetime <- as.POSIXct(pH_data$datetime) 
+
+start_culttemp<-as.POSIXct("2020-01-01 12:00:00")
+end_culttemp<-as.POSIXct("2020-12-15 12:00:00")
+temp_data_clean<- temp_data%>%
+  filter(between(datetime, start_culttemp, end_culttemp))
+
+temp_plot <- temp_data_clean%>%
+  ggplot(aes(x = datetime, y = temp))+
+  geom_line()+
+  labs(x = "",
+       y = "Temperature")+ # re-label y label 
+  theme_pubr()+ # remove the background color and make the plot look a bit simpler
+  theme(axis.title = element_text(size = 15),
+        axis.text = element_text(size = 12), 
+        plot.title=element_text(hjust = 0.5))
+
+temp_plot 
+
+ggsave(filename = "output/Cultured_temp.png", width = 10, height = 5, dpi = 300)
+
 
 # Consumption Rate Plot and Analysis ####
 # Diet Data and Plots ####
@@ -564,9 +606,10 @@ weightsum<- allrates%>%
   group_by(tank_ID,period)%>% 
   summarise(Ab_weight_sum = sum(weight)) %>% # get the sum of weights in each tank
   filter(period=="final") # only want final weights
+
 dietrates<-dietrates%>% 
   left_join(weightsum) # creates a column with summed weights by tank 
-
+view(dietrates)
 # clean the data
 diet_average<-dietrates%>%
   group_by(tank_ID, size_class, diet_treatment, heatwave_treatment, initial_weight, final_weight, AFDW_biomass_per_tank)%>%
@@ -574,6 +617,8 @@ diet_average<-dietrates%>%
   pivot_wider(names_from = diet_treatment, values_from = weight_change)
 mean(diet_average$control, na.rm = T)
 # average control reduction in growth is 3.67111, use this for calculating total granms consumed and grams consumed / biomass
+dietrates<-dietrates[-c(13),]
+view(dietrates)
 dietrates_clean<-dietrates%>%
   group_by(tank_ID, size_class, diet_treatment, heatwave_treatment, initial_weight, final_weight, AFDW_biomass_per_tank)%>%
   summarise(weight_change = final_weight - initial_weight)%>%
@@ -585,17 +630,18 @@ dietrates_clean<-dietrates%>%
   summarise(grams_consumed_over_biomass = grams_consumed_norm/AFDW_biomass_per_tank)
 view(dietrates_clean)
 
+
 #code for average biomass consumed, didn't finish because one point seems unnecessary
 summarychangediet_no<-dietrates_clean%>%
   select(tank_ID, size_class, heatwave_treatment, grams_consumed_over_biomass)%>%
   group_by(size_class)%>%
   pivot_wider(names_from = size_class, values_from = grams_consumed_over_biomass)
+view(summarychangediet_no)
 
 summary_diet<- dietrates_clean%>%
   group_by(size_class, heatwave_treatment)%>%
   summarise(diet_avg=mean(grams_consumed_over_biomass),
-            diet_se=sd(grams_consumed_over_biomass)/sqrt(n()))%>%
-  drop_na()            
+            diet_se=sd(grams_consumed_over_biomass)/sqrt(n()))
 view(summary_diet)
 
 # Analysis for consumption data ####
@@ -618,10 +664,11 @@ consumption_plot <- summary_diet%>%
   #facet_wrap(~heatwave_treatment)+
   labs(x = "Size Class",
        y = "Average Grams consumed / AFDW Biomass")+ # re-label y label 
-  theme_light()+ # remove the background color and make the plot look a bit simpler
+  theme_pubr()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 16),
         axis.text = element_text(size = 12))+
-  scale_color_manual(values = c("#a8a8a8", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#523C92", 
+                                "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
 consumption_plot
 ggsave(filename = "output/consumption_plot_avg.png", width = 5, height = 5, dpi = 300)
@@ -636,21 +683,26 @@ consumption_plot <- dietrates_clean%>%
   theme_light()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 16),
         axis.text = element_text(size = 12))+
-  scale_color_manual(values = c("#a8a8a8", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#523C92", 
+                                "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
 consumption_plot
 ggsave(filename = "output/consumption_plot_raw.png", width = 5, height = 5, dpi = 300)
 
 ## Consumption vs. Respiration per tank ##
 
+view(resporates)
 ## Clean the Data
-Respo_final<- read_csv(here("data","respo_raw_final_w:tank.csv"))
+Respo_final<- resporates
 
 Resp_final_avg<-Respo_final%>%
   group_by(tank_ID)%>%
-  summarize(average_resp = mean(umol.gram.hr))
-view(Resp_final_avg)
+  summarize(average_resp = mean(mmol.gram.hr))
 
+view(Resp_final_avg)
+Resp_final_avg<-Resp_final_avg[-c(2, 4, 10, 11),]
+
+view(Resp_final_avg)
 diet_final_avg<-dietrates
 diet_final_avg[diet_final_avg==0]<-NA
 diet_final_avg<-diet_final_avg%>%
@@ -676,12 +728,13 @@ consumption_resp_plot <- Resp_diet_avg_clean%>%
   geom_smooth(method = lm)+
   geom_jitter()+
   #facet_wrap(~heatwave_treatment)+
-  xlab(bquote('Average Respiration ('*'mmol' ~CO[2]~ gram^-1~hr^-1*')'))+
+  xlab(bquote('Average Respiration ('*'mmol' ~O[2]~ gram^-1~hr^-1*')'))+
   ylab(bquote('Average Grams Consumed / AFDW Organic Biomass'))+
-  theme_light()+ # remove the background color and make the plot look a bit simpler
-  theme(axis.title = element_text(size = 16),
+  theme_pubr()+ # remove the background color and make the plot look a bit simpler
+  theme(axis.title = element_text(size = 14),
         axis.text = element_text(size = 12))+
-  scale_color_manual(values = c("#a8a8a8", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#523C92", 
+                                "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
 consumption_resp_plot
 ggsave(filename = "output/consumption_resp_plot.png", width = 8, height = 5, dpi = 300)
@@ -699,15 +752,17 @@ consumption_resp_plot_all <- Resp_diet_avg_clean%>%
   geom_smooth(method = lm)+
   geom_jitter()+
   #facet_wrap(~heatwave_treatment)+
-  xlab(bquote('Average Respiration ('*'mmol' ~CO[2]~ gram^-1~hr^-1*')'))+
+  xlab(bquote('Average Respiration ('*'mmol' ~O[2]~ gram^-1~hr^-1*')'))+
   ylab(bquote('Average Grams Consumed / AFDW Organic Biomass'))+
-  theme_light()+ # remove the background color and make the plot look a bit simpler
+  theme_pubr()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 16),
         axis.text = element_text(size = 12))+
-  scale_color_manual(values = c("#a8a8a8", "#990000"), labels = c('Ambient', 'Heatwave'))
+  scale_color_manual(values = c("#523C92", 
+                                "#ff9d03"), labels = c('Ambient', 'Heatwave'))
 consumption_resp_plot_all
 ggsave(filename = "output/consumption_resp_plot_all.png", width = 8, height = 5, dpi = 300)
 
+#random stats 
 library(stargazer)
 data(mtcars)
 resporates_df <- as.data.frame(resporates)

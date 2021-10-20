@@ -139,41 +139,56 @@ hobo_temps<-rbind(tank3_amb, tank4_hw, tank5_amb, tank6_hw, tank7_amb, tank8_hw,
 start<-as.POSIXct("2020-10-22 00:00:00")
 end<-as.POSIXct("2020-12-12 21:00:00") # this is not end of diet trials, only heatwave 
 hobo_temps_mean <- hobo_temps %>% group_by(treatment, date) %>%
-  summarise(TempInSitu_mean = mean(TempInSitu, na.rm = TRUE))%>%
+  summarise(TempInSitu_mean = mean(TempInSitu, na.rm = TRUE), 
+            TempInSitu_SE = sd(TempInSitu)/sqrt(n()), na.rm = TRUE)%>%
   filter(between(date, start, end))
 view(hobo_temps_mean)
+
+hobo_temps_mean<-hobo_temps_mean%>%
+  na.omit()
+
+write_csv(hobo_temps_mean, "data/hobo_temps_mean.csv")
+
 
 hobo_temps_mean%>%
   ggplot(aes(x = date, y = TempInSitu_mean, group = treatment, color = treatment))+
   geom_line()+
   xlab(bquote('Date'))+
   ylab(bquote('Temperature (\u00B0C)'))+
-  theme_light()+ # remove the background color and make the plot look a bit simpler
+  theme_pubr()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 10),
         axis.text = element_text(size = 12), 
         plot.title=element_text(hjust = 0.5))+
-  scale_color_manual(values = c("#535353", "#990000"), labels = c('Ambient', 'Heatwave'))+
+  scale_color_manual(values = c("#523C92", 
+                                "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
+ggsave(filename = "output/Avg_Treatment_plot.png", width = 10, height = 5, dpi = 300)
+
 
 ## Average Temperatures Based on Treatment and Time Point ####
-hobo_temps_mean
 
+hobo_temps_clean<-hobo_temps_mean%>%
+  select(-c(TempInSitu_SE, na.rm))
+view(hobo_temps_clean)
 # Pre HW
 start_prehw<-as.POSIXct("2020-10-22 00:00:00")
 end_prehw<-as.POSIXct("2020-10-30 24:00:00")
-hobo_temps_means_pre<- hobo_temps_mean%>%
+hobo_temps_means_pre<- hobo_temps_clean%>%
   group_by(treatment)%>%
   filter(between(date, start_prehw, end_prehw))%>%
-  summarise(TempInSitu_mean = mean(TempInSitu_mean, na.rm = TRUE))
+  summarise(TempInSitu_mean = mean(TempInSitu_mean, na.rm = TRUE), 
+            SE = sd(TempInSitu_mean)/sqrt(n()))
 
-hobo_temps_means_pre
+view(hobo_temps_means_pre)
+
 # HW
 start_hw<-as.POSIXct("2020-11-06 00:00:00")
 end_hw<-as.POSIXct("2020-11-26 00:00:00")
 hobo_temps_means_hw<- hobo_temps_mean%>%
   group_by(treatment)%>%
   filter(between(date, start_hw, end_hw))%>%
-  summarise(TempInSitu_mean = mean(TempInSitu_mean, na.rm = TRUE))
+  summarise(TempInSitu_mean = mean(TempInSitu_mean, na.rm = TRUE), 
+            SE = sd(TempInSitu_mean)/sqrt(n()))
 hobo_temps_means_hw
 
 # Post Hw (a bit off)
@@ -182,20 +197,24 @@ end_posthw<-as.POSIXct("2020-12-12 21:00:00")
 hobo_temps_means_post<- hobo_temps_mean%>%
   group_by(treatment)%>%
   filter(between(date, start_posthw, end_posthw))%>%
-  summarise(TempInSitu_mean = mean(TempInSitu_mean, na.rm = TRUE))
+  summarise(TempInSitu_mean = mean(TempInSitu_mean, na.rm = TRUE), 
+            SE = sd(TempInSitu_mean)/sqrt(n()))
 hobo_temps_means_post
+
 
 ## Averaging pH data by timepoint and treatment ####
 pH_salinity_data <- read_csv(here("data/Chiachi_Meso_ph.csv"))
 pH_salinity_data$date <- ymd(pH_salinity_data$date)
 pH_salinity_data$date <-as.POSIXct(pH_salinity_data$date)
 
+view(pH_salinity_data)
 start_prehw_pH<-as.POSIXct("2020-10-22")
 end_prehw_pH<-as.POSIXct("2020-10-30")
 pH_means_pre<-pH_salinity_data%>%
   group_by(treatment)%>%
 filter(between(date, start_prehw_pH, end_prehw_pH))%>%
-  summarise(pH_mean = mean(pH, na.rm = TRUE))
+  summarise(pH_mean = mean(pH, na.rm = TRUE), 
+            pH_SE = sd(pH)/sqrt(n()))
 pH_means_pre
 
 # HW
@@ -204,7 +223,8 @@ end_hw_pH<-as.POSIXct("2020-11-26")
 pH_means_hw<- pH_salinity_data%>%
   group_by(treatment)%>%
   filter(between(date, start_hw_pH, end_hw_pH))%>%
-  summarise(pH_mean = mean(pH, na.rm = TRUE))
+  summarise(pH_mean = mean(pH, na.rm = TRUE), 
+            pH_SE = sd(pH)/sqrt(n()))
 pH_means_hw
 
 # Post HW
@@ -213,8 +233,10 @@ end_posthw_pH<-as.POSIXct("2020-12-12")
 pH_means_post<- pH_salinity_data%>%
   group_by(treatment)%>%
   filter(between(date, start_posthw_pH, end_posthw_pH))%>%
-  summarise(pH_mean = mean(pH, na.rm = TRUE))
+  summarise(pH_mean = mean(pH, na.rm = TRUE), 
+            pH_SE = sd(pH)/sqrt(n()))
 pH_means_post
+
 
 ## Averaging Salinity data by timepoint and treatment ####
 start_prehw_salinity<-as.POSIXct("2020-10-22")
@@ -222,7 +244,8 @@ end_prehw_salinity<-as.POSIXct("2020-10-30")
 salinity_means_pre<-pH_salinity_data%>%
   group_by(treatment)%>%
   filter(between(date, start_prehw_salinity, end_prehw_salinity))%>%
-  summarise(salinity_mean = mean(Salinity_lab, na.rm = TRUE))
+  summarise(salinity_mean = mean(Salinity_lab, na.rm = TRUE), 
+            Sal_SE = sd(Salinity_lab)/sqrt(n()))
 salinity_means_pre
 
 # HW
@@ -231,7 +254,8 @@ end_hw_salinity<-as.POSIXct("2020-11-26")
 salinity_means_hw<- pH_salinity_data%>%
   group_by(treatment)%>%
   filter(between(date, start_hw_salinity, end_hw_salinity))%>%
-  summarise(salinity_mean = mean(Salinity_lab, na.rm = TRUE))
+  summarise(salinity_mean = mean(Salinity_lab, na.rm = TRUE), 
+            Sal_SE = sd(Salinity_lab)/sqrt(n()))
 salinity_means_hw
 
 # Post HW
@@ -240,8 +264,10 @@ end_posthw_salinity<-as.POSIXct("2020-12-12")
 salinity_means_post<- pH_salinity_data%>%
   group_by(treatment)%>%
   filter(between(date, start_posthw_salinity, end_posthw_salinity))%>%
-  summarise(salinity_mean = mean(Salinity_lab, na.rm = TRUE))
+  summarise(salinity_mean = mean(Salinity_lab, na.rm = TRUE), 
+            Sal_SE = sd(Salinity_lab)/sqrt(n()))
 salinity_means_post
+
 
 ## Averaging TA by Timepoint and Treatment ####
 TA_data <- read_csv(here("data/TA_all.csv"))
@@ -254,7 +280,8 @@ end_prehw_TA<-as.POSIXct("2020-11-05")
 TA_means_pre<-TA_data%>%
   group_by(treatment)%>%
   filter(between(date, start_prehw_TA, end_prehw_TA))%>%
-  summarise(TA_mean = mean(TA, na.rm = TRUE))
+  summarise(TA_mean = mean(TA, na.rm = TRUE), 
+            TA_SE = sd(TA)/sqrt(n()))
 TA_means_pre
 
 # HW
@@ -263,7 +290,8 @@ end_hw_TA<-as.POSIXct("2020-11-26")
 TA_means_hw<- TA_data%>%
   group_by(treatment)%>%
   filter(between(date, start_hw_TA, end_hw_TA))%>%
-  summarise(TA_mean = mean(TA, na.rm = TRUE))
+  summarise(TA_mean = mean(TA, na.rm = TRUE), 
+            TA_SE = sd(TA)/sqrt(n()))
 TA_means_hw
 
 # Post HW
@@ -272,5 +300,6 @@ end_posthw_TA<-as.POSIXct("2020-12-12")
 TA_means_post<- TA_data%>%
   group_by(treatment)%>%
   filter(between(date, start_posthw_TA, end_posthw_TA))%>%
-  summarise(TA_mean = mean(TA, na.rm = TRUE))
+  summarise(TA_mean = mean(TA, na.rm = TRUE), 
+            TA_SE = sd(TA)/sqrt(n()))
 TA_means_post

@@ -4,7 +4,7 @@ tank_ID,size_class ,diet_treatment,heatwave_treatment,initial_weight,final_weigh
 1,30,control,amb,24.99,23.5,1.49,0
 2,90,control,amb,39.51,36.55,2.96,0
 2,60,control,amb,32,30.08,1.92,0
-2,30,control,amb,34.97,23.08,11.89,0
+2,30,control,amb,24.97,23.08,1.89,0
 3,90,treatment,amb,39.51,22.08,17.43,38.159064
 4,90,control ,amb,39.5,35.97,3.53,0
 4,60,control ,amb,31.97,31.45,0.52,0
