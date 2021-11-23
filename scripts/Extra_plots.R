@@ -1,5 +1,53 @@
 # plots that aren't being used for thesis 
 #Survivorship 
+# to make 1s alive and 2 dead 
+mortality_surv <- mortality%>%
+  mutate(status=case_when(
+    status==1~2, 
+    status==0~1))
+
+# Survivorship data analysis 
+# google how to use interaction terms in a cox proportional hazard analysis 
+res.cox1 <- coxph(Surv(time, status) ~ treatment*size_class, data = mortality_surv)
+res.cox1
+summary(res.cox1)
+
+# multivariate cox regression analysis 
+covariates<- c("treatment", "size_class")
+univ_formulas <- sapply(covariates,
+                        function(x) as.formula(paste('Surv(time, status)~', x)))
+
+univ_models <- lapply( univ_formulas, function(x){coxph(x, data = mortality_surv)})
+# Extract data 
+univ_results <- lapply(univ_models,
+                       function(x){ 
+                         x <- summary(x)
+                         p.value<-signif(x$wald["pvalue"], digits=2)
+                         wald.test<-signif(x$wald["test"], digits=2)
+                         beta<-signif(x$coef[1], digits=2);#coeficient beta
+                         HR <-signif(x$coef[2], digits=2);#exp(beta)
+                         HR.confint.lower <- signif(x$conf.int[,"lower .95"], 2)
+                         HR.confint.upper <- signif(x$conf.int[,"upper .95"],2)
+                         HR <- paste0(HR, " (", 
+                                      HR.confint.lower, "-", HR.confint.upper, ")")
+                         res<-c(beta, HR, wald.test, p.value)
+                         names(res)<-c("beta", "HR (95% CI for HR)", "wald.test", 
+                                       "p.value")
+                         return(res)
+                         #return(exp(cbind(coef(x),confint(x))))
+                       })
+res <- t(as.data.frame(univ_results, check.names = FALSE))
+as.data.frame(res)
+# .99 p value for both treatment and size_class? this seems wrong
+
+res.cox3 <- coxph(Surv(time, status) ~ treatment+size_class, data = mortality_surv)
+summary(res.cox3)
+res.cox3
+
+ggsurvplot(survfit(res.cox3), data = mortality_surv, color = "#2E9FDF",
+           ggtheme = theme_minimal())
+
+
 
 # treatment mortality with all sizes, not using this ?
 fit1 <- survfit(Surv(time, status) ~ treatment, data = mortality)
