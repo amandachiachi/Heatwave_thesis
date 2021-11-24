@@ -1,5 +1,5 @@
 # Respiration Analysis Script 
-# Last Edited 11/16/2021
+# Last Edited 11/24/2021
 # Load Libraries #### 
 library('here')
 library('stringr')
@@ -22,10 +22,11 @@ mortality_clean<- read_csv(here("data", "mortality_clean.csv"))
 # statistical analysis 
 # to calculate the log-rank test p-value, I use survdiff()
 survdiff(Surv(time, status)~treatment, data = mortality_clean)
-survdiff(Surv(time, status)~size_class, data = mortality_surv)
+survdiff(Surv(time, status)~size_class, data = mortality_clean)
 survdiff(Surv(time, status)~treatment+size_class, data = mortality_clean)
+# I need to figure out how to get my statistical analysis to have treatment * size class.
 
-surv_fit<-coxph(Surv(time, status)~treatment+size_class, data = mortality_clean)
+surv_fit<-coxph(Surv(time, status)~treatment*size_class, data = mortality_clean)
 surv_fit
 # this is still non significant
 
@@ -33,35 +34,42 @@ surv_fit
 sfit <-survfit(Surv(time,status)~treatment, data = mortality_clean)
 plot(sfit)
 ggsurvplot(sfit)
+summary(sfit)
+
 # plot this in ggsurv plot, not indivdual for heatwave treatment 
 ggsurvplot(sfit, conf.int=TRUE, pval=TRUE, risk.table=TRUE, 
            legend.labs=c("Abmient", "Heatwave"), legend.title="Treatment",  
            palette=c("dodgerblue2", "orchid2"), 
            title="Kaplan-Meier Curve for Lung Cancer Survival", 
            risk.table.height=.15)
-summary(sfit)
 
 # to look at the fit with treatment and size class separated, this also as the log-rank p value included
-sfit_all <-survfit(Surv(time,status)~treatment+size_class, data = mortality_clean)
+sfit_all <-survfit(Surv(time,status)~treatment, data = mortality_clean)
 plot(sfit_all)
-ggsurvplot(sfit_all, 
+survplot_stats<-ggsurvplot(sfit_all, 
            pval = TRUE, 
            conf.int = TRUE, 
            risk.table = TRUE, 
            pval.method = TRUE,
            size = 1, 
            linetype = "strata", 
+           ggtheme = theme_minimal(), 
+           palette = c("#523C92", 
+                       "#ff9d03"),
            legend = "bottom", 
-           legend.title = "", 
-           ggtheme = theme_minimal())
+           legend.title = "",
+           xlab = "",
+           ylab = "",
+           legend.labs = c("Ambient", "Heatwave")) 
+survplot_stats
+# this is my plot showing the survivorship of heatwave vs. ambient along with the log-rank p value
+ggsave(filename = "output/survplot_stats.png", width = 9, height = 4, dpi = 300)
 
-# plot each survivorship plot 
-# treatment mortality with size class 30 
+# Individual Survivorship Plots
+# Size Class 30 
 mort_30<- mortality_clean%>%
   filter(size_class == "30")
-#view(mort_30)
 fit1 <- survfit(Surv(time, status) ~ treatment, data = mort_30)
-#ggsurv(fit1)
 p1<- ggsurvplot(fit1, data = mortality_clean,
                 conf.int = TRUE,
                 pval = FALSE, 
@@ -77,16 +85,14 @@ p1<- ggsurvplot(fit1, data = mortality_clean,
                 ylab = "",
                 legend.labs = c("Ambient", "Heatwave"))
 p1plot <- p1$plot + 
-  labs(title = "A             30mm") + 
+  labs(tags = "A", title = "30") + 
   geom_vline(xintercept=0, linetype='dashed', color='black', size=.5)+ 
   annotate("text", x = 0, y = 25, label = "Peak Heatwave", angle = 90, vjust = 1.5)
-
 p1plot
-# treatment mortality with size class 60 
+# Size Class 60 
 mort_60<- mortality_clean%>%
   filter(size_class == "60")
 fit1 <- survfit(Surv(time, status) ~ treatment, data = mort_60)
-#ggsurv(fit1)
 p2<-ggsurvplot(fit1, data = mortality_clean,
                conf.int = TRUE,
                pval =FALSE, 
@@ -100,14 +106,16 @@ p2<-ggsurvplot(fit1, data = mortality_clean,
                legend.title = "", 
                ylab = "Survival probability (%)",
                xlab = "",
-               legend.labs = c("Ambient", "Heatwave"))
-p2plot <- p2$plot + labs(title = "B             60mm")+  geom_vline(xintercept=0, linetype='dashed', color='black', size=.5)
-
-# treatment mortality with size class 90
+               legend.labs = c("Ambient", "Heatwave"),
+               axis.text = element_text(size = 12))
+p2plot <- p2$plot + 
+  labs(tags = "B", title = "60")+  
+  geom_vline(xintercept=0, linetype='dashed', color='black', size=.5)
+p2plot
+# Size Class 90
 mort_90<- mortality_clean%>%
   filter(size_class == "90")
 fit1 <- survfit(Surv(time, status) ~ treatment, data = mort_90)
-#ggsurv(fit1)
 p3<-ggsurvplot(fit1, data = mortality_clean,
                conf.int = TRUE,
                pval = FALSE, 
@@ -122,20 +130,19 @@ p3<-ggsurvplot(fit1, data = mortality_clean,
                xlab = "Time (Days)",
                ylab = "",
                legend.labs = c("Ambient", "Heatwave"))
-p3plot <- p3$plot + labs(title = "C             90mm")+  geom_vline(xintercept=0, linetype='dashed', color='black', size=.5)
-
-# use patchwork to combine all mortality plots and make them pub quality 
+p3plot <- p3$plot + 
+  labs(tags = "C", title = "90")+  
+  geom_vline(xintercept=0, linetype='dashed', color='black', size=.5)
+p3plot
+# Combine three plots (30,60,90) with patchwork
 (p1plot/p2plot/p3plot)+ plot_layout( guides = 'collect') & theme(legend.position = "bottom")
-ggsave(filename = "output/survplot_all.png", width = 5, height = 13, dpi = 300)
-#ggsave(filename = "output/survplot_all.png", width = 4, height = 10, dpi = 300)
+ggsave(filename = "output/survplot_all.png", width = 5, height = 12, dpi = 300)
 
+# Respiration Data Cleaning (Part 1) ####
 
-
-# Respiration Data ####
-#Remove data with faulty data (turn into NA based on visual of oxygen) 
-
+# load dataset, this has been compiled by previous respiration code
 Respo.R.clean<- read_csv(here("data","Abalone_Respo_Rates_nolog.csv"))
-#view(Respo.R.clean)
+#Remove data with faulty data (turn into NA based on visual of oxygen) 
 is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab19_amb_channel3_Trial8_posthw_11_25_20_O2"
 is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab26_amb_channel4_Trial8_posthw_11_25_20_O2"
 is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab31_amb_channel1_Trial8_posthw_11_25_20_O2"
@@ -150,20 +157,19 @@ is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab81_amb_c
 is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab83_amb_channel3_trial8_final_12_12_20_O2"
 is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "ab88_amb_channel2_Trial8_posthw_11_25_20_O2"
 is.na(Respo.R.clean$mmol.gram.hr) <- Respo.R.clean$abalone_number == "blank_hw_channel7_Trial5_posthw_11_25_20_O2"
-
+# remove NAs from dataset to consolidate
 Respo.R.clean<-Respo.R.clean%>%
   drop_na(mmol.gram.hr)
-#view(Respo.R.clean)
 
-# Clean respiration rates data file
+# Now clean dataset to only include the information we need to anayze and plot 
 resporates<- Respo.R.clean%>%
   select(abalone_number, size_class, treatment, period, mmol.gram.hr, tank_ID)%>%
   mutate(period = factor(period, levels = c("prehw", "posthw", "final")))%>%
   separate(abalone_number, into = "abalone_ID", sep = "_")%>%
   mutate(abalone_ID = as.numeric(str_extract_all(abalone_ID, "[0-9]+")))
-view(resporates)
 
-# Size, Mortality and Diet data ####
+# Combine Size, Mortality & Diet Data + Data exploration ####
+# Length Rates Data File
 sizedata<- read_csv(here("data", "condition_index.csv"))%>%
   mutate(period = factor(period, levels = c("receiving", "prehw", "posthw", "final")))
 # Mortality rates data file
@@ -171,13 +177,11 @@ mortality<- read_csv(here("data", "mortality_raw.csv"))
 # Diet trial rates data file 
 dietrates<- read_csv(here("data", "diet_raw.csv")) # add the factor as listed above when changed 
 
-# Bring Data sets together ######
-#join respo data sheet with the size data to make it one called allrates
+# Combine these datasheets together and call it allrates
 allrates<- resporates %>%
   left_join(sizedata)
 
-# Data exploration (length, respiration and weight) ####
-# Check histogram with shell length, respiration rates and weight 
+# Data exploration (histograms with shell length, respiration and weight)
 allrates%>%
   ggplot(aes(x = shell_length_cm))+
   geom_histogram()
@@ -190,9 +194,8 @@ allrates%>%
   ggplot(aes(x = weight))+
   geom_histogram()
 
+# % Change Code for Weight, Shell length, Respiration, and CI ####
 
-# Calculate percent change for weight, shell length, respiration, and CI ####
-view(allrates)
 percentchange<- allrates%>%
   group_by(abalone_ID, treatment, size_class)%>%
   summarise(weightpchange=100*(weight[period=="final"]-weight[period=="prehw"])/weight[period=="prehw"],
@@ -214,8 +217,13 @@ summarypchange<- percentchange%>%
             CI_avgpchange=mean(CIpchange), 
             CI_sepchange=sd(CIpchange)/sqrt(n()))%>%
   drop_na()
-#view(summarypchange)
-# Analysis for change in weight and change in shell length ####
+
+# Statistical Analysis (ANOVA + Tukey) for change in weight, shell length, and CI ####
+
+# Make treatment and size class each a factor
+percentchange$treatment<-as.factor(percentchange$treatment)
+percentchange$size_class<-as.factor(percentchange$size_class)
+
 # Weight model
 weightmodel<- lm(weightpchange ~size_class*treatment, data= percentchange)
 check_model(weightmodel)
@@ -243,26 +251,31 @@ CI_model_p<-aov(CIpchange ~ size_class*treatment, data = percentchange)
 summary(CI_model_p)
 TukeyHSD(CI_model_p, conf.level = .95)
 
-percentchange%>%
-  ggplot(aes(x = size_class, y = weightpchange, color = treatment))+
-  geom_boxplot()
+# Plot weight, length, CI and respiration at two time points ####
+
+
+
+# Weight plot #should this be AFDW?
 # find outliers - ambient 60 mm abalone (make sure this isn't a typo)
 # probably a sample size issue 
 # averages are quite different but because of the heatwave mortality - sample size changed which could impact post hoc analysis 
 # on average the heatwave abalone grew 7% slower etc... 
 # heatwave on average grew 7% slower (-12.9, -1.1, 95%CI, <0.02)
-# even though it wasnt statistically significant in the post hoc due to sample size, on average the 30 mm abalone grew ...% slower there are trends towards the 30 mm abalone having greater effect of heatwave, on average the larger abalone had a negative growth rate of ____ mean point on the plot
-# Plot weight, length, CI and respiration at two time points ####
-#Weight plot #should this be AFDW?
+# even though it wasn't statistically significant in the post hoc due to sample size, on average the 30 mm abalone grew ...% slower there are trends towards the 30 mm abalone having greater effect of heatwave, on average the larger abalone had a negative growth rate of ____ mean point on the plot
+
+percentchange%>%
+  ggplot(aes(x = size_class, y = weightpchange, color = treatment))+
+  geom_boxplot()
+
 weight_plot <- summarypchange%>%
   ggplot(aes(x = factor(size_class), y = weight_avgpchange, color = treatment))+
   geom_point()+
   geom_errorbar(aes(ymin = weight_avgpchange - weight_sepchange, ymax = weight_avgpchange + weight_sepchange), width = 0.1)+
   geom_hline(yintercept=0, linetype='dashed', color='black', size=.5)+ 
-  annotate("text", x = .8, y = .8, label = "", vjust = 2)+
+  annotate("text", x = .8, y = .8, label = "A")+
   labs(x = "",
        y = "Change in Weight (%)", 
-       tags = "a")+ # re-label y label 
+       tags = "A")+ # re-label y label 
   theme_light()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 13),
         axis.text = element_text(size = 12),
@@ -284,7 +297,7 @@ length_plot <- summarypchange%>%
   annotate("text", x = .8, y = .8, label = "")+
   labs(x = "",
        y = "Change in Length (%)", 
-       tags = "b")+ # re-label y label 
+       tags = "B")+ # re-label y label 
   theme_light()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 13),
         axis.text = element_text(size = 12),
@@ -306,7 +319,7 @@ CI_plot <- summarypchange%>%
   #annotate("text", x = .8, y = .8, vjust = 2.5)+
   labs(x = "Size Class",
        y = "Change in Condition Index (%)", 
-       tags = "c")+ # re-label y label 
+       tags = "C")+ # re-label y label 
   theme_light()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 13),
         axis.text = element_text(size = 12))+
@@ -318,7 +331,7 @@ CI_plot
 
 #Combine Weight, Length and CI plots 
 weight_plot/length_plot/CI_plot + plot_layout(guides = 'collect')& theme(legend.position = "bottom")
-ggsave(filename = "output/change_weight_length_CI.png", width = 3, height = 9, dpi = 300)
+ggsave(filename = "output/change_weight_length_CI.png", width = 4, height = 9, dpi = 300)
 
 
 #Average respiration rate (not percent change)
@@ -346,6 +359,11 @@ is.na(resporates_healthy$mmol.gram.hr) <- resporates_healthy$abalone_number == "
 is.na(resporates_healthy$mmol.gram.hr) <- resporates_healthy$abalone_number == "ab86_hw_channel6_Trial5_posthw_11_25_20_O2"
 is.na(resporates_healthy$mmol.gram.hr) <- resporates_healthy$abalone_number == "ab72_hw_channel4_Trial6_posthw_11_25_20_O2"
 is.na(resporates_healthy$mmol.gram.hr) <- resporates_healthy$abalone_number == "ab89_hw_channel4_Trial5_posthw_11_25_20_O2"
+is.na(resporates_healthy$mmol.gram.hr) <- resporates_healthy$abalone_number == "ab11_hw_channel3_Trial5_posthw_11_25_20_O2"
+is.na(resporates_healthy$mmol.gram.hr) <- resporates_healthy$abalone_number == "ab38_hw_channel1_Trial6_posthw_11_25_20_O2"
+is.na(resporates_healthy$mmol.gram.hr) <- resporates_healthy$abalone_number == "ab45_hw_channel8_Trial1_posthw_11_24_20_O2"
+is.na(resporates_healthy$mmol.gram.hr) <- resporates_healthy$abalone_number == "ab61_hw_channel6_Trial1_posthw_11_24_20_O2"
+is.na(resporates_healthy$mmol.gram.hr) <- resporates_healthy$abalone_number == "ab80_hw_channel10_Trial2_posthw_11_24_20_O2"
 
 resporates_healthy<-resporates_healthy%>%
   drop_na(mmol.gram.hr)
@@ -398,12 +416,12 @@ view(resposummary_clean_1)
 Respo_30_average_clean<- resposummary_clean_1%>%
   ggplot(aes(x = factor(period), y = resp_30, color = treatment))+
   geom_point()+
-  ylim(5, 40)+
+  ylim(20, 40)+
   geom_errorbar(aes(ymin = resp_30 - resp_30_se, ymax = resp_30 + resp_30_se), width = 0.1)+
   xlab(bquote(''))+
   ylab(bquote(''))+
   ggtitle("30")+
-  theme_light()+ # remove the background color and make the plot look a bit simpler
+  theme_light()+# remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 10),
         axis.text = element_text(size = 12), 
         plot.title=element_text(hjust = 0.5),
@@ -413,12 +431,12 @@ Respo_30_average_clean<- resposummary_clean_1%>%
   scale_color_manual(values = c("#523C92", 
                                 "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
-Respo_30_average
+Respo_30_average_clean
 
 Respo_60_average_clean<- resposummary_clean_1%>%
   ggplot(aes(x = factor(period), y = resp_60, color = treatment))+
   geom_point()+
-  ylim(5, 40)+
+  ylim(17, 28)+
   geom_errorbar(aes(ymin = resp_60 - resp_60_se, ymax = resp_60 + resp_60_se), width = 0.1)+
   xlab(bquote(''))+
   ylab(bquote('Average Respiration Rate ('*'mmol' ~O[2]~ gram^-1~hr^-1*')'))+
@@ -438,7 +456,7 @@ Respo_60_average_clean
 Respo_90_average_clean<- resposummary_clean_1%>%
   ggplot(aes(x = factor(period), y = resp_90, color = treatment))+
   geom_point()+
-  ylim(5, 40)+
+  ylim(5, 16)+
   geom_errorbar(aes(ymin = resp_90 - resp_90_se, ymax = resp_90 + resp_90_se), width = 0.1)+
   xlab(bquote('Time Period'))+
   ylab(bquote(''))+
@@ -450,7 +468,7 @@ Respo_90_average_clean<- resposummary_clean_1%>%
   scale_color_manual(values = c("#523C92", 
                                 "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
-Respo_90_average
+Respo_90_average_clean
 
 Respo_30_average_clean/Respo_60_average_clean/Respo_90_average_clean + plot_layout(guides = 'collect')& theme(legend.position = "bottom")
 ggsave(filename = "output/respo_plot_average_clean.png", width = 4, height = 10, dpi = 300)
@@ -489,13 +507,6 @@ respo_plot_data_healthy%>%
        y = expression(paste("Respiration Log Ratio", frac(heatwave,control))))+
   geom_label(data = plotlabels, aes(x=x, y=y, label = label), show.legend = FALSE)
 ggsave(filename = "output/respo_log_healthy.png", width = 14, height = 5, dpi = 300)
-
-
-
-
-
-
-
 
 
 
