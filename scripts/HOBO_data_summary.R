@@ -8,7 +8,6 @@ library('ggplot2')
 
 # Load Data
 here()
-view(tank3_amb)
 tank3_amb <- read_csv(here("data","TNK-3-SN20565253 2020-12-18 15_04_48 -0800.csv"),skip = 1)%>%
   mutate(tank_number = "3")%>%
   select(-c("Button Down", "Button Up", "Host Connect", "EOF"))%>%

@@ -195,7 +195,7 @@ allrates%>%
   geom_histogram()
 
 # % Change Code for Weight, Shell length, Respiration, and CI ####
-
+view(allrates)
 percentchange<- allrates%>%
   group_by(abalone_ID, treatment, size_class)%>%
   summarise(weightpchange=100*(weight[period=="final"]-weight[period=="prehw"])/weight[period=="prehw"],
@@ -233,6 +233,8 @@ weight_model_p<-aov(weightpchange ~ size_class*treatment, data = percentchange)
 summary(weight_model_p)
 TukeyHSD(weight_model_p, conf.level = .95)
 
+?check_model
+
 # Length model
 lengthmodel<- lm(shellpchange ~size_class*treatment, data = percentchange)
 check_model(lengthmodel)
@@ -251,28 +253,25 @@ CI_model_p<-aov(CIpchange ~ size_class*treatment, data = percentchange)
 summary(CI_model_p)
 TukeyHSD(CI_model_p, conf.level = .95)
 
-# Plot weight, length, CI and respiration at two time points ####
-
-
-
-# Weight plot #should this be AFDW?
-# find outliers - ambient 60 mm abalone (make sure this isn't a typo)
-# probably a sample size issue 
-# averages are quite different but because of the heatwave mortality - sample size changed which could impact post hoc analysis 
-# on average the heatwave abalone grew 7% slower etc... 
-# heatwave on average grew 7% slower (-12.9, -1.1, 95%CI, <0.02)
-# even though it wasn't statistically significant in the post hoc due to sample size, on average the 30 mm abalone grew ...% slower there are trends towards the 30 mm abalone having greater effect of heatwave, on average the larger abalone had a negative growth rate of ____ mean point on the plot
+# Plot % Change in Weight, Shell Length, CI ####
 
 percentchange%>%
   ggplot(aes(x = size_class, y = weightpchange, color = treatment))+
   geom_boxplot()
+percentchange%>%
+  ggplot(aes(x = size_class, y = shellpchange, color = treatment))+
+  geom_boxplot()
+percentchange%>%
+  ggplot(aes(x = size_class, y = CIpchange, color = treatment))+
+  geom_boxplot()
 
+view(percentchange)
 weight_plot <- summarypchange%>%
   ggplot(aes(x = factor(size_class), y = weight_avgpchange, color = treatment))+
   geom_point()+
   geom_errorbar(aes(ymin = weight_avgpchange - weight_sepchange, ymax = weight_avgpchange + weight_sepchange), width = 0.1)+
   geom_hline(yintercept=0, linetype='dashed', color='black', size=.5)+ 
-  annotate("text", x = .8, y = .8, label = "A")+
+  annotate("text", x = .8, y = .8, label = "")+
   labs(x = "",
        y = "Change in Weight (%)", 
        tags = "A")+ # re-label y label 
@@ -334,12 +333,7 @@ weight_plot/length_plot/CI_plot + plot_layout(guides = 'collect')& theme(legend.
 ggsave(filename = "output/change_weight_length_CI.png", width = 4, height = 9, dpi = 300)
 
 
-#Average respiration rate (not percent change)
-# Plot Average Respiration Rate & SE faceted by size class 
-
-
-# data analysis without NA Respiration Data
-# may not use this first respiration analysis 
+# Respiration Analysis (Sick abalone removed) ####
 # Ambient to Heatwave Change in Respiration Analysis 
 respo_hw_model<- lm(respopchange_hw~size_class*treatment, data= percentchange)
 check_model(respo_hw_model)
@@ -473,7 +467,7 @@ Respo_90_average_clean
 Respo_30_average_clean/Respo_60_average_clean/Respo_90_average_clean + plot_layout(guides = 'collect')& theme(legend.position = "bottom")
 ggsave(filename = "output/respo_plot_average_clean.png", width = 4, height = 10, dpi = 300)
 
-# Log Respiration Code #### 
+# Log Respiration Code (Sick abalone removed) #### 
 # Size class showing on plot, faceted by timepoint
 plotlabels<-data.frame(y = c(0.25, -0.5), x = c(1,1), label = c("Heatwave > Ambient", "Heatwave < Ambient"))
 # 
@@ -500,7 +494,9 @@ respo_plot_data_healthy%>%
   theme_light()+ 
   theme(axis.title = element_text(size = 14),
         axis.text = element_text(size = 12), 
-        plot.title=element_text(hjust = 0.5))+
+        plot.title=element_text(hjust = 0.5), 
+        strip.background = element_rect(color="white", fill="white", size=1.5), 
+        strip.text.x = element_text(size = 12, color = "black"))+
   theme(legend.title = element_blank())+
   scale_fill_viridis_d()+
   labs(x = "Time Point",
@@ -509,10 +505,7 @@ respo_plot_data_healthy%>%
 ggsave(filename = "output/respo_log_healthy.png", width = 14, height = 5, dpi = 300)
 
 
-
-
-
-
+# Respiration analysis & Plots without removing sick abalone####
 # make treatment and size class factors for tukey test 
 resporates$treatment<-as.factor(resporates$treatment)
 resporates$size_class<-as.factor(resporates$size_class)
@@ -616,7 +609,7 @@ Respo_90_average
 Respo_30_average/Respo_60_average/Respo_90_average + plot_layout(guides = 'collect')& theme(legend.position = "bottom")
 ggsave(filename = "output/respo_plot_average.png", width = 3, height = 10, dpi = 300)
 
-# Log Respiration Code #### 
+# Log Respiration Code without removing sick abalone
 # Size class showing on plot, faceted by timepoint
 plotlabels<-data.frame(y = c(0.25, -0.5), x = c(1,1), label = c("Heatwave > Ambient", "Heatwave < Ambient"))
 # 
@@ -643,7 +636,9 @@ respo_plot_data%>%
   theme_light()+ 
   theme(axis.title = element_text(size = 14),
         axis.text = element_text(size = 12), 
-        plot.title=element_text(hjust = 0.5))+
+        plot.title=element_text(hjust = 0.5), 
+        strip.background = element_rect(color="white", fill="white", size=1.5), 
+        strip.text.x = element_text(size = 12, color = "black"))+
   theme(legend.title = element_blank())+
   scale_fill_viridis_d()+
   labs(x = "Time Point",
@@ -652,7 +647,7 @@ respo_plot_data%>%
 ggsave(filename = "output/respo_log.png", width = 14, height = 5, dpi = 300)
 
 
-# Cultured abalone pH - general plot #####
+# Cultured abalone pH & temperature - general plot #####
 pH_data <- read_csv(here("data", "Cultured_pH.csv"))
 view(pH_data)
 pH_data$datetimes <- mdy_hm(pH_data$datetimes)
@@ -664,12 +659,13 @@ end_cultpH<-as.POSIXct("2021-04-30 12:00:00")
 pH_data_clean<- pH_data%>%
   filter(between(datetimes, start_cultpH, end_cultpH))
 
-y_expression_ph<- expression(pH[Nbs])
+y_expression_ph<- expression(pH[NBS])
 pH_plot <- pH_data_clean%>%
   ggplot(aes(x = datetimes, y = pH))+
   geom_line()+
   labs(x = "2021",
-       y = y_expression_ph)+
+       y = y_expression_ph, 
+       tags = "B")+
   theme_pubr()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 17),
         axis.text = element_text(size = 17), 
@@ -683,7 +679,7 @@ ggsave(filename = "output/Cultured_pH.png", width = 10, height = 5, dpi = 300)
 temp_data <- read_csv(here("data", "A1_Cult-SN20565264.csv"))
 view(temp_data)
 temp_data$datetime <- mdy_hm(temp_data$datetime)
-temp_data$datetime <- as.POSIXct(pH_data$datetime) 
+#temp_data$datetime <- as.POSIXct(temp_data$datetime) 
 
 start_culttemp<-as.POSIXct("2020-01-01 12:00:00")
 end_culttemp<-as.POSIXct("2020-12-15 12:00:00")
@@ -699,7 +695,8 @@ temp_plot <- temp_data_clean%>%
   geom_vline(xintercept=dates_vline, linetype = 'dashed', color = 'black', size = .5)+ 
   geom_vline(xintercept=dates_vline2, linetype = 'dashed', color = 'black', size = .5)+
   labs(x = "",
-       y = "Temperature (°C)")+
+       y = "Temperature (°C)", 
+       tags = "A")+
   #scale_x_date(date_labels = "%B")+
   theme_pubr()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 17),
@@ -711,7 +708,10 @@ temp_plot
 
 ggsave(filename = "output/Cultured_temp.png", width = 10, height = 5, dpi = 300)
 
-# Consumption Rate Plot and Analysis ####
+temp_plot|pH_plot + plot_layout(guides = 'collect')& theme(legend.position = "bottom")
+ggsave(filename = "output/cult_temp_ph.png", width = 12, height = 3, dpi = 300)
+
+# Consumption Rate + Consumption & Respiration Plot and Analysis ####
 # calculate diet data normalized by weight 
 # similar to my code that Jenn helped me with
 weightsum<- allrates%>%
@@ -755,7 +755,7 @@ summary_diet<- dietrates_clean%>%
             diet_se=sd(grams_consumed_over_biomass)/sqrt(n()))
 view(summary_diet)
 
-# Analysis for consumption data ####
+# Analysis for consumption data
 # consumption model
 consumptionmodel<- lm(diet_avg ~size_class*heatwave_treatment, data= summary_diet)
 check_model(consumptionmodel)# did not work
@@ -789,10 +789,28 @@ ggsave(filename = "output/consumption_plot_avg.png", width = 5, height = 5, dpi 
 view(resporates)
 ## Clean the Data
 Respo_final<- resporates
-
-Resp_final_avg<-Respo_final%>%
+Respo_final_clean<-resporates_healthy_final
+Resp_final_avg_clean<-Respo_final_clean%>%
   group_by(tank_ID)%>%
   summarize(average_resp = mean(mmol.gram.hr))
+
+view(Resp_final_avg)
+Resp_final_avg_clean<-Resp_final_avg_clean[-c(2,4,6,10,11),]
+
+view(Resp_final_avg_clean)
+diet_final_avg<-dietrates
+diet_final_avg[diet_final_avg==0]<-NA
+diet_final_avg<-diet_final_avg[-c(4),]%>%
+  na.omit()
+view(diet_final_avg)
+
+Resp_diet_avg_clean<-cbind(Resp_final_avg_clean, diet_final_avg)
+
+Resp_diet_avg_clean<-Resp_diet_avg_clean%>%
+  select(-1)
+
+view(Resp_diet_avg_clean)
+
 
 view(Resp_final_avg)
 Resp_final_avg<-Resp_final_avg[-c(2,4,6,10,11),]
@@ -825,7 +843,7 @@ consumption_resp_plot <- Resp_diet_avg_clean%>%
   geom_jitter()+
   #facet_wrap(~heatwave_treatment)+
   xlab(bquote('Average Respiration ('*'mmol' ~O[2]~ gram^-1~hr^-1*')'))+
-  ylab(bquote('Consumption Rate '('gram'['algae ']*  'gram'['abalone biomass ']^-1*  ' day'^-1)))+
+  ylab(bquote('Consumption Rate '('gram'['algae ']*  ' gram'['abalone biomass ']^-1*  ' day'^-1)))+
   theme_pubr()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 14),
         axis.text = element_text(size = 12))+
@@ -833,7 +851,7 @@ consumption_resp_plot <- Resp_diet_avg_clean%>%
                                 "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
 consumption_resp_plot
-ggsave(filename = "output/consumption_resp_plot.png", width = 8, height = 5, dpi = 300)
+ggsave(filename = "output/consumption_resp_plot_clean.png", width = 8, height = 5, dpi = 300)
 
 ## change after this 
 
@@ -868,3 +886,24 @@ reg1 <- lm(shell_length ~ weight, data = sizedata)
 reg2 <- lm(shell_length ~ weight + log(CI), data = sizedata)
 
 stargazer(reg1, reg2, type = "text")
+
+###Ash Free Dry Weight Correlation Plot###
+afdw_data <- read_csv(here("data", "afdw_correlation.csv"))
+
+view(afdw_data)
+afdw_plot <- afdw_data%>%
+  ggplot(aes(x = wet_weight, y = dry_weight))+
+  geom_smooth(method = lm)+
+  geom_jitter()+
+  labs(x = "Wet Weight (G)",
+       y = "Dry Biomass (AFDW)")+
+  theme_light()+ # remove the background color and make the plot look a bit simpler
+  theme(axis.title = element_text(size = 17),
+        axis.text = element_text(size = 17), 
+        plot.title=element_text(hjust = 0.5))
+
+
+afdw_plot 
+ggsave(filename = "output/afdw_correlation.png", width = 8, height = 5, dpi = 300)
+
+
