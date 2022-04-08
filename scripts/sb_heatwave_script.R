@@ -123,12 +123,12 @@ mhw$event %>%
 
 #####Visualizing Marine Heatwaves######
 heatwave_plot1<-event_line(mhw, spread = 550, metric = "intensity_max", 
-           start_date = "2013-01-01", end_date = "2019-08-29")+
+           start_date = "2013-01-01", end_date = "2019-08-29")+ labs(tags = "A") +
   theme(axis.title = element_text(size = 17),
         axis.text = element_text(size = 17), 
         plot.title=element_text(hjust = 0.5))
 #category = TRUE for categories
-heatwave_lolli<-lolli_plot(mhw, metric = "intensity_max", xaxis = "date_peak")+
+heatwave_lolli<-lolli_plot(mhw, metric = "intensity_max", xaxis = "date_peak")+ labs(tags = "B")+
   theme(axis.title = element_text(size = 17),
         axis.text = element_text(size = 17), 
         plot.title=element_text(hjust = 0.5))

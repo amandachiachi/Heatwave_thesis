@@ -82,6 +82,62 @@ ggsurvplot(fit2, data = mortality,
            legend.labs = c("30", "60", "90"))
 
 
+## before this clean out the respo that you dont need 
+# i moved this code down into the respo analysis section 
+# Combine these datasheets together and call it allrates
+allrates<- resporates %>%
+  left_join(sizedata)
+
+# Data exploration (histograms with shell length, respiration and weight)
+allrates%>%
+  ggplot(aes(x = shell_length_cm))+
+  geom_histogram()
+
+allrates%>%
+  ggplot(aes(x = mmol.gram.hr))+
+  geom_histogram()
+
+allrates%>%
+  ggplot(aes(x = weight))+
+  geom_histogram()
+# summarizing percent change with respiration 
+view(allrates)
+percentchange<- allrates%>%
+  group_by(abalone_ID, treatment, size_class)%>%
+  summarise(weightpchange=100*(weight[period=="final"]-weight[period=="prehw"])/weight[period=="prehw"],
+            shellpchange=100*(shell_length_cm[period=="final"]-shell_length_cm[period=="prehw"])/shell_length_cm[period=="prehw"], 
+            respopchange_hw=100*(mmol.gram.hr[period=="posthw"]-mmol.gram.hr[period=="prehw"])/mmol.gram.hr[period=="prehw"],
+            respopchange_final=100*(mmol.gram.hr[period=="final"]-mmol.gram.hr[period=="prehw"])/mmol.gram.hr[period=="prehw"], 
+            CIpchange=100*CI[period=="final"]-CI[period=="prehw"]/CI[period=="prehw"])
+
+summarypchange<- percentchange%>%
+  group_by(size_class, treatment)%>%
+  summarise(weight_avgpchange=mean(weightpchange),
+            weight_sepchange=sd(weightpchange)/sqrt(n()), 
+            shell_avgpchange=mean(shellpchange), 
+            shell_sepchange=sd(shellpchange)/sqrt(n()), 
+            resp_hw_avgpchange=mean(respopchange_hw),
+            resp_hw_sepchange=sd(respopchange_hw)/sqrt(n()), 
+            resp_final_avgpchange=mean(respopchange_final),
+            resp_final_sepchange=sd(respopchange_final)/sqrt(n()), 
+            CI_avgpchange=mean(CIpchange), 
+            CI_sepchange=sd(CIpchange)/sqrt(n()))%>%
+  drop_na()
+
+
+# Ambient to Heatwave Change in Respiration Analysis 
+respo_hw_model<- lm(respopchange_hw~size_class*treatment, data= percentchange)
+check_model(respo_hw_model)
+# checked the model and everything looks normal 
+anova(respo_hw_model)
+
+# Heatwave to Recovery Change in Respiration Analysis 
+respo_final_model<- lm(respopchange_final~size_class*treatment, data= percentchange)
+check_model(respo_final_model)
+# checked the model and everything looks normal 
+anova(respo_final_model)
+
+
 # Respiration Plots ####
 Respo_plot_hw<- summarypchange%>%
   ggplot(aes(x = factor(size_class), y = resp_hw_avgpchange, color = treatment))+
@@ -196,3 +252,147 @@ consumption_plot <- dietrates_clean%>%
   theme(legend.title = element_blank())
 consumption_plot
 ggsave(filename = "output/consumption_plot_raw.png", width = 5, height = 5, dpi = 300)
+
+
+# Respiration analysis & Plots without removing sick abalone####
+# make treatment and size class factors for tukey test 
+resporates$treatment<-as.factor(resporates$treatment)
+resporates$size_class<-as.factor(resporates$size_class)
+#simple anova 
+respo_model<-lm(mmol.gram.hr~size_class*treatment*period, data = resporates)
+check_model(respo_model)
+anova(respo_model)
+#anova with tukey post-hoc test
+respo_model_2<-aov(mmol.gram.hr ~ size_class*treatment*period, data = resporates)
+check_model(respo_model_2)
+summary(respo_model_2)
+TukeyHSD(respo_model_2, conf.level = .95)
+# not sure if I did this correctly- 3 way interaction ANOVA?
+# remove sick abalone (about to die), from my resporates - save as separate csv file, run this analysis 
+
+resporates<- Respo.R.clean%>%
+  select(abalone_number, size_class, treatment, period, mmol.gram.hr, tank_ID)%>%
+  mutate(period = factor(period, levels = c("prehw", "posthw", "final")))%>%
+  separate(abalone_number, into = "abalone_ID", sep = "_")%>%
+  mutate(abalone_ID = as.numeric(str_extract_all(abalone_ID, "[0-9]+")))
+view(resporates)
+resporates$size_name<-with(resporates, factor(size_class, levels = c(30,60,90), 
+                                              labels = c("Thirty", "Sixty", "Ninety")))
+
+resporates <- resporates%>%
+  mutate(period=case_when(
+    period=="prehw"~"1", 
+    period=="posthw"~"2", 
+    period=="final"~"3"))
+
+view(resporates)
+resposummary1<- resporates%>%
+  group_by(period, treatment)%>%
+  pivot_wider(names_from = size_name, values_from = mmol.gram.hr)%>%
+  summarise(resp_30=mean(Thirty, na.rm = TRUE), 
+            resp_30_se=sd(Thirty, na.rm = TRUE/sqrt(n())), 
+            resp_60=mean(Sixty, na.rm = TRUE), 
+            resp_60_se=sd(Sixty, na.rm = TRUE)/sqrt(n()), 
+            resp_90=mean(Ninety, na.rm = TRUE), 
+            resp_90_se=sd(Ninety, na.rm = TRUE)/sqrt(n()))
+view(resposummary1)
+
+# Averaged Respiration Rate Plot
+Respo_30_average<- resposummary1%>%
+  ggplot(aes(x = factor(period), y = resp_30, color = treatment))+
+  geom_point()+
+  ylim(5, 40)+
+  geom_errorbar(aes(ymin = resp_30 - resp_30_se, ymax = resp_30 + resp_30_se), width = 0.1)+
+  xlab(bquote(''))+
+  ylab(bquote(''))+
+  ggtitle("30")+
+  theme_light()+ # remove the background color and make the plot look a bit simpler
+  theme(axis.title = element_text(size = 10),
+        axis.text = element_text(size = 12), 
+        plot.title=element_text(hjust = 0.5),
+        axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())+
+  scale_color_manual(values = c("#523C92", 
+                                "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
+  theme(legend.title = element_blank())
+Respo_30_average
+
+Respo_60_average<- resposummary1%>%
+  ggplot(aes(x = factor(period), y = resp_60, color = treatment))+
+  geom_point()+
+  ylim(5, 40)+
+  geom_errorbar(aes(ymin = resp_60 - resp_60_se, ymax = resp_60 + resp_60_se), width = 0.1)+
+  xlab(bquote(''))+
+  ylab(bquote('Average Respiration Rate ('*'mmol' ~O[2]~ gram^-1~hr^-1*')'))+
+  ggtitle("60")+
+  theme_light()+ # remove the background color and make the plot look a bit simpler
+  theme(axis.title = element_text(size = 10),
+        axis.text = element_text(size = 12), 
+        plot.title=element_text(hjust = 0.5),
+        axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())+
+  scale_color_manual(values = c("#523C92", 
+                                "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
+  theme(legend.title = element_blank())
+Respo_60_average
+
+Respo_90_average<- resposummary1%>%
+  ggplot(aes(x = factor(period), y = resp_90, color = treatment))+
+  geom_point()+
+  ylim(5, 40)+
+  geom_errorbar(aes(ymin = resp_90 - resp_90_se, ymax = resp_90 + resp_90_se), width = 0.1)+
+  xlab(bquote('Time Period'))+
+  ylab(bquote(''))+
+  ggtitle("90")+
+  theme_light()+ # remove the background color and make the plot look a bit simpler
+  theme(axis.title = element_text(size = 10),
+        axis.text = element_text(size = 12), 
+        plot.title=element_text(hjust = 0.5))+
+  scale_color_manual(values = c("#523C92", 
+                                "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
+  theme(legend.title = element_blank())
+Respo_90_average
+
+Respo_30_average/Respo_60_average/Respo_90_average + plot_layout(guides = 'collect')& theme(legend.position = "bottom")
+ggsave(filename = "output/respo_plot_average.png", width = 3, height = 10, dpi = 300)
+
+# Log Respiration Code without removing sick abalone
+# Size class showing on plot, faceted by timepoint
+plotlabels<-data.frame(y = c(0.25, -0.5), x = c(1,1), label = c("Heatwave > Ambient", "Heatwave < Ambient"))
+# 
+respo_plot_data<-resporates %>%
+  mutate(phase = as.factor(ifelse(treatment=="amb", "base","treat")))%>% # needed for LRR function base is control
+  group_split(size_class, period)%>%
+  purrr::map_dfr(
+    function(x){
+      LRR_test<-logRespRatio(x$mmol.gram.hr, phase = x$phase, base_level = "base")
+      LNRR<-LRR_test$lRR # log response ratio
+      CI.LL <- LRR_test$CI[1] # lower CI
+      CI.UL <- LRR_test$CI[2] # upper CI
+      period<- x$period[1] # time period
+      size_class<-as.factor(x$size_class[1]) # size class
+      data.frame(size_class, period, LNRR,CI.LL, CI.UL) # make a dataframe of everything
+    }
+  )
+respo_plot_data%>%
+  ggplot(aes(x = period, y = LNRR))+
+  facet_wrap(~size_class)+
+  geom_bar(stat = "identity", position = position_dodge(0.9))+
+  geom_errorbar(width = 0.1, aes(ymin = CI.LL, ymax = CI.UL),position = position_dodge(0.9)) +
+  geom_hline(yintercept = 0, lty = 2)+
+  theme_light()+ 
+  theme(axis.title = element_text(size = 14),
+        axis.text = element_text(size = 12), 
+        plot.title=element_text(hjust = 0.5), 
+        strip.background = element_rect(color="white", fill="white", size=1.5), 
+        strip.text.x = element_text(size = 12, color = "black"))+
+  theme(legend.title = element_blank())+
+  scale_fill_viridis_d()+
+  labs(x = "Time Point",
+       y = expression(paste("Respiration Log Ratio", frac(heatwave,control))))+
+  geom_label(data = plotlabels, aes(x=x, y=y, label = label), show.legend = FALSE)
+ggsave(filename = "output/respo_log.png", width = 14, height = 5, dpi = 300)
+
+
