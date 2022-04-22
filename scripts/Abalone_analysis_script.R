@@ -1,5 +1,5 @@
 # Respiration Analysis Script 
-# Last Edited 11/24/2021
+# Last Edited 4/05/2022
 # Load Libraries #### 
 library('here')
 library('stringr')
@@ -13,6 +13,7 @@ library('lubridate')
 library('patchwork')
 library('ARPobservation')
 library('reshape2')
+library('ggpmisc')
 
 # Survivorship Plots ####
 
@@ -25,6 +26,7 @@ mortality<- read_csv(here("data", "mortality_raw.csv"))
 survdiff(Surv(time, status)~treatment, data = mortality_clean)
 survdiff(Surv(time, status)~size_class, data = mortality_clean)
 survdiff(Surv(time, status)~treatment+size_class, data = mortality_clean)
+
 # I need to figure out how to get my statistical analysis to have treatment * size class.
 
 surv_fit<-coxph(Surv(time, status)~treatment*size_class, data = mortality_clean)
@@ -85,10 +87,10 @@ p1<- ggsurvplot(fit1, data = mortality,
                 legend = "bottom", 
                 legend.title = "",
                 xlab = "",
-                ylab = "Survival probability (%)",
+                ylab = "",
                 legend.labs = c("Ambient", "Heatwave"))
 p1plot <- p1$plot + 
-  labs(tags = "A", title = "30") + 
+  labs(tags = "A", title = "30mm") + 
   geom_vline(xintercept=0, linetype='dashed', color='black', size=.5)+ 
   annotate("text", x = 0, y = 25, label = "Peak Heatwave", angle = 90, vjust = 1.5)
 p1plot
@@ -108,12 +110,12 @@ p2<-ggsurvplot(fit1, data = mortality,
                            "#ff9d03"),
                legend = "bottom", 
                legend.title = "", 
-               ylab = "Time (Days)",
+               ylab = "Survival probability (%)",
                xlab = "",
                legend.labs = c("Ambient", "Heatwave"),
                axis.text = element_text(size = 12))
 p2plot <- p2$plot + 
-  labs(tags = "B", title = "60")+  
+  labs(tags = "B", title = "60mm")+  
   geom_vline(xintercept=0, linetype='dashed', color='black', size=.5)
 p2plot
 # Size Class 90
@@ -131,25 +133,26 @@ p3<-ggsurvplot(fit1, data = mortality,
                            "#ff9d03"),
                legend = "bottom", 
                legend.title = "", 
-               xlab = "",
+               xlab = "Time (days)",
                ylab = "",
                legend.labs = c("Ambient", "Heatwave"))
 p3plot <- p3$plot + 
-  labs(tags = "C", title = "90")+  
+  labs(tags = "C", title = "90mm")+  
   geom_vline(xintercept=0, linetype='dashed', color='black', size=.5)
 p3plot
 # Combine three plots (30,60,90) with patchwork
-(p1plot+p2plot+p3plot)+ plot_layout( guides = 'collect') & theme(legend.position = "bottom")
-ggsave(filename = "output/survplot_all.png", width = 14, height = 4, dpi = 300)
+(p1plot/p2plot/p3plot)+ plot_layout( guides = 'collect') & theme(legend.position = "bottom")
+ggsave(filename = "output/survplot_all_vert.png", width = 4, height = 10, dpi = 300)
+
 
 
 # Size, Mortality & Diet Data ####
 # Length Rates Data File
 sizedata<- read_csv(here("data", "condition_index.csv"))%>%
   mutate(period = factor(period, levels = c("receiving", "prehw", "posthw", "final")))
-# Mortality rates data file
+# Load Mortality rates data file
 mortality<- read_csv(here("data", "mortality_raw.csv"))
-# Diet trial rates data file 
+# Load Diet trial rates data file 
 dietrates<- read_csv(here("data", "diet_raw.csv")) # add the factor as listed above when changed 
 
 # Length, Weight & CI Data Analysis and Plots####
@@ -247,7 +250,7 @@ weight_plot <- summarypchange%>%
   scale_color_manual(values = c("#523C92", 
                                 "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank(), legend.position = 'bottom', 
-        plot.tag.position = c(0.07, 0.95))
+        plot.tag.position = c(0.02, 1))
 weight_plot
 
 ## note- if you want to remove size class at the bottom use ,
@@ -262,7 +265,7 @@ length_plot <- summarypchange%>%
   geom_errorbar(aes(ymin = shell_avgpchange - shell_sepchange, ymax = shell_avgpchange + shell_sepchange), width = 0.1)+
   geom_hline(yintercept=0, linetype='dashed', color='black', size=.5)+ 
   annotate("text", x = .8, y = .8, label = "")+
-  labs(x = "",
+  labs(x = "Size Class",
        y = "Change in Length (%)", 
        tags = "B")+ # re-label y label 
   theme_light()+ # remove the background color and make the plot look a bit simpler
@@ -271,10 +274,10 @@ length_plot <- summarypchange%>%
   scale_color_manual(values = c("#523C92", 
                                 "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank(), legend.position = 'bottom', 
-        plot.tag.position = c(0.07, 0.95))
+        plot.tag.position = c(0.02, 1))
 length_plot
 
-weight_plot+length_plot+ plot_layout(guides = 'collect')& theme(legend.position = "top")
+weight_plot+length_plot+ plot_layout(guides = 'collect')& theme(legend.position = "bottom")
 ggsave(filename = "output/change_weight_length.png", width = 10, height = 5, dpi = 300)
 
 #CI plot
@@ -284,7 +287,7 @@ CI_plot <- summarypchange%>%
   geom_errorbar(aes(ymin = CI_avgpchange - CI_sepchange, ymax = CI_avgpchange + CI_sepchange), width = 0.1)+
   #geom_hline(yintercept=0, linetype='dashed', color='black', size=.5)+ 
   #annotate("text", x = .8, y = .8, vjust = 2.5)+
-  labs(x = "Size Class",
+  labs(x = "",
        y = "Change in Condition Index (%)", 
        tags = "C")+ # re-label y label 
   theme_light()+ # remove the background color and make the plot look a bit simpler
@@ -293,13 +296,13 @@ CI_plot <- summarypchange%>%
   scale_color_manual(values = c("#523C92", 
                                 "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank(), 
-        plot.tag.position = c(0.07, 0.95))
+        plot.tag.position = c(0.02, 1))
 CI_plot
 ggsave(filename = "output/change_CI.png", width = 6, height = 5, dpi = 300)
 
 #Combine Weight, Length and CI plots 
-weight_plot/length_plot/CI_plot + plot_layout(guides = 'collect')& theme(legend.position = "bottom")
-ggsave(filename = "output/change_weight_length_CI_noresp.png", width = 4, height = 9, dpi = 300)
+weight_plot+length_plot+CI_plot + plot_layout(guides = 'collect')& theme(legend.position = "bottom")
+ggsave(filename = "output/change_weight_length_CI_noresp.png", width = 10, height = 5, dpi = 300)
 
 ### Respiration 
 # Respiration Data Cleaning (Part 1) ####
@@ -399,11 +402,11 @@ Respo_30_average_clean<- resposummary_clean_1%>%
   geom_errorbar(aes(ymin = resp_30 - resp_30_se, ymax = resp_30 + resp_30_se), width = 0.1)+
   xlab(bquote(''))+
   ylab(bquote('Average Respiration Rate ('*'mmol' ~O[2]~ gram^-1~hr^-1*')'))+
-  ggtitle("30")+
+  ggtitle("A                            30mm")+
   theme_light()+# remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 11),
         axis.text = element_text(size = 14), 
-        plot.title=element_text(hjust = 0.5))+
+        plot.title=element_text(hjust = 0))+
   scale_color_manual(values = c("#523C92", 
                                 "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
@@ -416,11 +419,11 @@ Respo_60_average_clean<- resposummary_clean_1%>%
   geom_errorbar(aes(ymin = resp_60 - resp_60_se, ymax = resp_60 + resp_60_se), width = 0.1)+
   xlab(bquote('Time Period'))+
   ylab(bquote(''))+
-  ggtitle("60")+
+  ggtitle("B                            60mm")+
   theme_light()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 11),
         axis.text = element_text(size = 14), 
-        plot.title=element_text(hjust = 0.5))+
+        plot.title=element_text(hjust = 0))+
   scale_color_manual(values = c("#523C92", 
                                 "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
@@ -433,11 +436,11 @@ Respo_90_average_clean<- resposummary_clean_1%>%
   geom_errorbar(aes(ymin = resp_90 - resp_90_se, ymax = resp_90 + resp_90_se), width = 0.1)+
   xlab(bquote(''))+
   ylab(bquote(''))+
-  ggtitle("90")+
+  ggtitle("C                            90mm")+
   theme_light()+ # remove the background color and make the plot look a bit simpler
   theme(axis.title = element_text(size = 11),
         axis.text = element_text(size = 14), 
-        plot.title=element_text(hjust = 0.5))+
+        plot.title=element_text(hjust = 0))+
   scale_color_manual(values = c("#523C92", 
                                 "#ff9d03"), labels = c('Ambient', 'Heatwave'))+
   theme(legend.title = element_blank())
@@ -548,9 +551,25 @@ ggsave(filename = "output/Cultured_temp.png", width = 10, height = 5, dpi = 300)
 temp_plot|pH_plot + plot_layout(guides = 'collect')& theme(legend.position = "bottom")
 ggsave(filename = "output/cult_temp_ph.png", width = 12, height = 3, dpi = 300)
 
-# Consumption Rate + Consumption & Respiration Plot and Analysis ####
-# calculate diet data normalized by weight 
-# similar to my code that Jenn helped me with
+## combine size data with respodata
+allrates<- resporates_healthy%>%
+  left_join(sizedata)
+
+# Data exploration (histograms with shell length, respiration and weight)
+allrates%>%
+  ggplot(aes(x = shell_length_cm))+
+  geom_histogram()
+
+allrates%>%
+  ggplot(aes(x = mmol.gram.hr))+
+  geom_histogram()
+
+allrates%>%
+  ggplot(aes(x = weight))+
+  geom_histogram()
+# summarizing percent change with respiration 
+view(allrates)
+
 weightsum<- allrates%>%
   group_by(tank_ID,period)%>% 
   summarise(Ab_weight_sum = sum(weight)) %>% # get the sum of weights in each tank
@@ -649,7 +668,6 @@ Resp_diet_avg_clean<-Resp_diet_avg_clean%>%
 
 view(Resp_diet_avg_clean)
 
-
 ## Data Anlysis ###
 consumption_resp_model<- lm(AFDW_biomass_per_tank~average_resp*heatwave_treatment, data = Resp_diet_avg_clean)
 summary(consumption_resp_model)
@@ -658,8 +676,7 @@ anova(consumption_resp_model)
 
 
 #tukey here
-install.packages('ggpmisc')
-library('ggpmisc')
+
 # Plot With Treatment ##
 consumption_resp_plot <- Resp_diet_avg_clean%>%
   ggplot(aes(x = average_resp, y = AFDW_biomass_per_tank, color = heatwave_treatment))+
